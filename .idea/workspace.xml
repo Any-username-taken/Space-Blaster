@@ -4,17 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="146e4e39-37df-4227-bfe3-6990b5a24538" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/Space_Blaster.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Classes.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Constants.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Start.py" afterDir="false" />
+    <list default="true" id="146e4e39-37df-4227-bfe3-6990b5a24538" name="Changes" comment="Started project on 4/28/2025">
+      <change afterPath="$PROJECT_DIR$/Space_Blaster_game/Sprites/Player/basic ship.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Space_Blaster_game/Sprites/Player/basic ship2.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Space_Blaster_game/Sprites/Projectiles/costume1.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,9 +18,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 1
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
   <component name="ProjectId" id="2wOetFKyij17NrCrRKyUCfTZeha" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -37,9 +31,19 @@
   "keyToString": {
     "Python.Start.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master"
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "C:/Users/deetr/Downloads/costume1.svg"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites\Player" />
+      <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites\Projectiles" />
+      <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites" />
+      <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game" />
+      <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Sprites" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -56,6 +60,19 @@
       <option name="presentableId" value="Default" />
       <updated>1745917259938</updated>
     </task>
+    <task id="LOCAL-00001" summary="Started project on 4/28/2025">
+      <option name="closed" value="true" />
+      <created>1745920458862</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1745920458862</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Started project on 4/28/2025" />
+    <option name="LAST_COMMIT_MESSAGE" value="Started project on 4/28/2025" />
   </component>
 </project>
