@@ -4,8 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="146e4e39-37df-4227-bfe3-6990b5a24538" name="Changes" comment="Added multiple images in prep for basic game mechanics">
+    <list default="true" id="146e4e39-37df-4227-bfe3-6990b5a24538" name="Changes" comment="Updated some code for class to load images">
+      <change afterPath="$PROJECT_DIR$/Space_Blaster_game/OtherImg/window widget.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Classes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Constants.py" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Constants.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Start.py" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Start.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,6 +30,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Python.Constants.executor": "Run",
     "Python.Start.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
@@ -34,11 +39,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\OtherImg" />
+      <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game" />
       <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites\Projectiles" />
       <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites\Enemies" />
       <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites\Player" />
-      <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites" />
-      <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game" />
     </key>
   </component>
   <component name="SharedIndexes">
@@ -73,12 +78,29 @@
       <option name="project" value="LOCAL" />
       <updated>1745950040478</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Added multiple images in prep for basic game mechanics">
+      <option name="closed" value="true" />
+      <created>1745950520535</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1745950520535</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Updated some code for class to load images">
+      <option name="closed" value="true" />
+      <created>1745950570920</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1745950570920</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Started project on 4/28/2025" />
     <MESSAGE value="Added multiple images in prep for basic game mechanics" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added multiple images in prep for basic game mechanics" />
+    <MESSAGE value="Updated some code for class to load images" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated some code for class to load images" />
   </component>
 </project>

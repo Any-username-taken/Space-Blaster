@@ -26,5 +26,3 @@ class Sprite:
         self.pos[0] += self.velX
         self.pos[1] += self.velY
 
-
-#commit
