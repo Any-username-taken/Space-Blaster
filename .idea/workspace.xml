@@ -4,11 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="146e4e39-37df-4227-bfe3-6990b5a24538" name="Changes" comment="Started project on 4/28/2025">
-      <change afterPath="$PROJECT_DIR$/Space_Blaster_game/Sprites/Player/basic ship.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Space_Blaster_game/Sprites/Player/basic ship2.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Space_Blaster_game/Sprites/Projectiles/costume1.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="146e4e39-37df-4227-bfe3-6990b5a24538" name="Changes" comment="Added multiple images in prep for basic game mechanics">
+      <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Classes.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,11 +34,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites\Player" />
       <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites\Projectiles" />
+      <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites\Enemies" />
+      <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites\Player" />
       <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites" />
       <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game" />
-      <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Sprites" />
     </key>
   </component>
   <component name="SharedIndexes">
@@ -68,11 +65,20 @@
       <option name="project" value="LOCAL" />
       <updated>1745920458862</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Added multiple images in prep for basic game mechanics">
+      <option name="closed" value="true" />
+      <created>1745950040478</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1745950040478</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Started project on 4/28/2025" />
-    <option name="LAST_COMMIT_MESSAGE" value="Started project on 4/28/2025" />
+    <MESSAGE value="Added multiple images in prep for basic game mechanics" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added multiple images in prep for basic game mechanics" />
   </component>
 </project>

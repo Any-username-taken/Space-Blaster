@@ -6,7 +6,8 @@ import random
 class Sprite:
     def __init(self, img_src, angle, pos, type_, other=''):
         # Path, angle, [x, y]
-        self.img_src = img_src
+        self.img_src = pygame.image.load(img_src)
+        self.hitBox = self.img_src.get_rect()
         self.angle = angle
         self.pos = pos
 
@@ -18,5 +19,11 @@ class Sprite:
 
         self.current_img = self.img_src
 
-    def draw(self):
-        return self.current_img, self.angle, self.pos
+        self.velX = 0
+        self.velY = 0
+
+    def update(self):
+        self.pos[0] += self.velX
+        self.pos[1] += self.velY
+
+
