@@ -1,0 +1,13 @@
+Information:
+Username? (I am debating adding this)
+Type of ship selected: (If in level, uses this for the ship)
+Last level exited: (Can be the level, or False for completed or died in level, Star system-Level)
+Xp: (Number of xp if in level when saved)
+Health: (Health left when last save, Has to be in level)
+Upgrades: [Upgrade1, Upgrade2] (If there is nothing here, just returns empty)
+Star system Unlock: [False, False, False, False, False, False] (False if locked, True if Unlocked.)
+Perm xp: (Number of xp for permanent upgrades)
+Perm Upgrades: []
+
+ILLEGAL CHARACTERS
+\ , . [ ] ( ) ` ' " ~ ; & ^ % $ # @ * = + / ? : < > |

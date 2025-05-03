@@ -1,0 +1,35 @@
+This is the levels text. Star systems are on the first line. Then it jumps to normal levels.
+Each star system is a collection of levels, so don't get confused! Remember to add level markers on end and start of
+levels.
+
+Enemy type/enemy preset(if custom, use - to split pos, meaning no preset and custom)/enemy count/time till next/continue
+
+Enemy type:
+Type of enemy (enemy1, enemy2, etc.)
+
+Enemy preset:
+Formation the type of enemy spawns in. If "-" present, custom pos may be entered. (x-y) Enemy spawned will enter as
+normal
+
+Enemy count:
+How many enemies remaining before it can move on to the next stage. (Ex; Enemy count 3 - move on when 1 = False, Enemy
+    count 0 - move on when 1 = True)
+Set this number to negative to disable (relying only on the timer to move on.)
+
+Time till next:
+Timer till next wave, doesn't work on last wave. Set to negative to rely only on enemy count. Remember, don't set both
+negative bro. Like come on.
+
+Continue:
+Bool checking if next wave can be spawned without any special conditions. If True, next wave will spawn, if False, waits
+until all enemies are dead. Can be set to U for shops, or if when I add the upgrade system and do something different,
+make it events. (CURRENT Continue VALUES: C(ontinue), S(top), U(pgrade/event))
+
+Split star systems by bar line, Splits waves/levels by \n, Splits custom enemy preset by -
+
+|
+S1
+2/1/0/50/C/1
+2/2/0/0/S/End
+1/1/0/0/S/2/End
+|

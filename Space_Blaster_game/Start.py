@@ -16,14 +16,31 @@ pygame.display.set_caption("Space Blaster")
 winWidget = pygame.image.load("OtherImg/window widget.svg")
 pygame.display.set_icon(winWidget)
 
+surf = pygame.Surface((100, 200))
+surf.fill("white")
+
 projectiles = []
+level_start = False
+current_username = False
+
 
 # --- Update Loops ---
+def projectile_update():
+    for bullet in projectiles:
+        bullet.update()
+
+
+# --- Save Files ---
+def save_current():
+    with open("Text/Important_text/saves.txt") as file:
+        file = file.read().split("|")
+
+    print(len(file))
+
 
 # Main game loop
 while running:
-    screen.fill((0, 0, 10))
-
+    # Event/User input loop
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -36,10 +53,10 @@ while running:
                 height = 500
             screen = pygame.display.set_mode((width, height), pygame.HWSURFACE | pygame.DOUBLEBUF | pygame.RESIZABLE)
 
-    delta_time = clock.tick(60) / 1000
-    delta_time = max(0.001, min(0.1, delta_time))
+    # Update screen
+    screen.fill((0, 0, 10))
 
-    pygame.display.flip()
-
+    screen.blit(surf, (100, 150))
+    pygame.display.update()
 
 pygame.quit()

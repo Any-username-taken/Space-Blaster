@@ -4,7 +4,7 @@ import random
 
 
 class Sprite:
-    def __init(self, img_src, angle, pos, type_, other=''):
+    def __init__(self, img_src, angle, pos, type_, other=''):
         # Path, angle, [x, y]
         self.img_src = pygame.image.load(img_src)
         self.hitBox = self.img_src.get_rect()
@@ -25,4 +25,23 @@ class Sprite:
     def update(self):
         self.pos[0] += self.velX
         self.pos[1] += self.velY
+
+
+class Player(Sprite):
+    def __init__(self, img_src, angle, pos, type_, other, speed, fire_rate, type_bullet, controllable, misfire):
+        super().__init__(img_src, angle, pos, type_, other)
+
+        self.speed = speed
+        self.fire_rate = fire_rate
+        self.type_bullet = type_bullet
+        self.controllable = controllable
+        self.misfire = misfire
+        self.upgrades = []
+        self.xp = 0
+        self.negative_e = []
+        self.immune = []
+        self.timers = []
+
+    def refresh(self):
+        self.update()
 

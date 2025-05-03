@@ -1,0 +1,17 @@
+Hooray! From scratch to Javascript to now python!
+
+To Do:
+Finish sprite class: False
+Finish player class: False
+Create Bullet class: False
+Finish Bullet class: False
+Create enemy class: False
+Finish enemy2 movement/fire pattern: False
+Finish enemy1 movement/fire pattern: False (enemy1 has more complex movement)
+Finish enemy class: False
+Finish bullet_update function: False
+Create & finish player/enemy update functions: False
+Add update functions to main loop: False
+Create Background class: False
+Finish Background class: False
+Revamp and transpose level system from scratch/javascript: False

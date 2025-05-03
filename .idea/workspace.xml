@@ -4,11 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="146e4e39-37df-4227-bfe3-6990b5a24538" name="Changes" comment="Updated some code for class to load images">
-      <change afterPath="$PROJECT_DIR$/Space_Blaster_game/OtherImg/window widget.svg" afterDir="false" />
+    <list default="true" id="146e4e39-37df-4227-bfe3-6990b5a24538" name="Changes" comment="Added adjustable screen size with limit">
+      <change afterPath="$PROJECT_DIR$/Space_Blaster_game/Text/Important_text/levels.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Space_Blaster_game/Text/Important_text/saves.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Space_Blaster_game/Text/Important_text/saves_info.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Space_Blaster_game/Text/Plans.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Classes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Constants.py" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Constants.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Sprites/Enemies/common.svg" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Sprites/Enemies/Enemy1/common.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Sprites/Enemies/common2.svg" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Sprites/Enemies/Enemy1/common2.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Start.py" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Start.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -28,22 +32,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.Constants.executor": "Run",
-    "Python.Start.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "last_opened_file_path": "C:/Users/deetr/Downloads/costume1.svg"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.Classes.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Constants.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Start.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/deetr/Downloads/costume1.svg&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites\Enemies\Enemy1" />
       <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\OtherImg" />
       <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game" />
       <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites\Projectiles" />
       <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites\Enemies" />
-      <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites\Player" />
     </key>
   </component>
   <component name="SharedIndexes">
@@ -94,13 +99,22 @@
       <option name="project" value="LOCAL" />
       <updated>1745950570920</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Added adjustable screen size with limit">
+      <option name="closed" value="true" />
+      <created>1745954305878</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1745954305878</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Started project on 4/28/2025" />
     <MESSAGE value="Added multiple images in prep for basic game mechanics" />
     <MESSAGE value="Updated some code for class to load images" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated some code for class to load images" />
+    <MESSAGE value="Added adjustable screen size with limit" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added adjustable screen size with limit" />
   </component>
 </project>
