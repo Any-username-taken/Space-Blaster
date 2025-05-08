@@ -16,18 +16,19 @@ pygame.display.set_caption("Space Blaster")
 winWidget = pygame.image.load("OtherImg/window widget.svg")
 pygame.display.set_icon(winWidget)
 
-surf = pygame.Surface((100, 200))
-surf.fill("white")
+# -- Less Important Setup --
+background = pygame.transform.scale(pygame.image.load("Sprites/Backgrounds/bground1.svg"), (100, 100))
 
-projectiles = []
 level_start = False
 current_username = False
 
+# --- Class Creation ---
+player = Player("Sprites/Player/basic ship.svg", ["Sprites/Player/basic ship2.svg"], [100, 500], 1, 10, 2, 5, 30, 6, True, [WIDTH, HEIGHT])
+
 
 # --- Update Loops ---
-def projectile_update():
-    for bullet in projectiles:
-        bullet.update()
+def check_collision(danger, target):
+    return danger.pos[0] < target.pos[0] + target.width and danger.pos[0] + danger.width > target.pos[0] and danger.pos[1] < target.pos[1] + target.height and danger.pos[1] + danger.height > target.pos[1]
 
 
 # --- Save Files ---
@@ -55,8 +56,15 @@ while running:
 
     # Update screen
     screen.fill((0, 0, 10))
+    screen.blit(background, (0, 0))
 
-    screen.blit(surf, (100, 150))
+    screen.blit(player.current_image, player.imOutline)
+    pygame.draw.rect(screen, "red", player.hitBox, width=2)
+    pygame.draw.rect(screen, "green", player.imOutline, width=2)
+    player.refresh()
+
     pygame.display.update()
+
+    clock.tick(FPS)
 
 pygame.quit()
