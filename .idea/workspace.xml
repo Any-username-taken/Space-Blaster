@@ -5,8 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="146e4e39-37df-4227-bfe3-6990b5a24538" name="Changes" comment="Just some new updates">
-      <change afterPath="$PROJECT_DIR$/Space_Blaster_game/Sprites/Backgrounds/bground1.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Space_Blaster_game/test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Classes.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Start.py" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Start.py" afterDir="false" />
@@ -28,17 +26,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.Classes.executor": "Run",
-    "Python.Constants.executor": "Run",
-    "Python.Start.executor": "Run",
-    "Python.test.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "last_opened_file_path": "C:/Users/deetr/Downloads/image_2025-05-07_163620428.svg"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.Classes.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Constants.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Start.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/deetr/Downloads/image_2025-05-07_163620428.svg&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites\Backgrounds" />
@@ -112,7 +110,15 @@
       <option name="project" value="LOCAL" />
       <updated>1746316133084</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Just some new updates">
+      <option name="closed" value="true" />
+      <created>1746677329538</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1746677329538</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">

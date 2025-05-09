@@ -5,13 +5,14 @@ import math
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, img_src, anim_srcs, pos, type_, mSpeed, fireRate, damage, bull_lifetime, bull_speed, controllable, screen_par):
+    def __init__(self, img_src, anim_srcs, pos, type_, mSpeed, fireRate, damage, bull_lifetime, bull_speed, controllable, screen_par, scale=0.4):
         super().__init__()
 
-        self.scale = 0.5
+        self.scale = scale
 
         self.image = pygame.transform.rotozoom(pygame.image.load(img_src), 0, self.scale)
         self.current_image = self.image
+        self.holder_image = self.image
 
         self.anim = anim_srcs
         self.anim_speed = 0.5
@@ -29,6 +30,7 @@ class Player(pygame.sprite.Sprite):
         self.mSpeed = mSpeed
 
         self.fireRate = fireRate
+        self.coolDown = 0
         self.damage = damage
         self.bull_life = bull_lifetime
         self.bull_speed = bull_speed
@@ -45,6 +47,12 @@ class Player(pygame.sprite.Sprite):
         self.rotation()
         self.change_vel()
         self.movement()
+        fire_check = self.fire_control()
+        self.cool()
+        self.update_animation()
+
+        if fire_check:
+            return self.damage, self.bull_speed, self.bull_life, "1", "Sprites/Projectiles/costume1.svg"
 
     def rotation(self):
         if not self.controllable == False and not self.type == 2:
@@ -54,7 +62,7 @@ class Player(pygame.sprite.Sprite):
             self.mouse[2][1] = (self.mouse[0][1] - self.hitBox.centery)
 
             self.angle = math.degrees(math.atan2(self.mouse[2][1], self.mouse[2][0]))
-            self.current_image = pygame.transform.rotate(self.image, -self.angle)
+            self.current_image = pygame.transform.rotate(self.holder_image, -self.angle)
             self.imOutline = self.current_image.get_rect(center=self.hitBox.center)
 
     def movement(self):
@@ -132,3 +140,76 @@ class Player(pygame.sprite.Sprite):
             self.mouse[1] = True
         else:
             self.mouse[1] = False
+
+    def fire_control(self):
+        if self.coolDown <= 0 and self.mouse[1]:
+            # backfire = random.randint(1, 100)
+
+            if self.fireRate > 0.8 and self.type == 1:
+                self.fireRate -= 0.2
+
+            self.pos[0] = self.pos[0] - (5 * math.cos(math.radians(self.angle)))
+            self.pos[1] = self.pos[1] - (5 * math.sin(math.radians(self.angle)))
+
+            self.coolDown = self.fireRate
+
+            self.anim_speed = 0.5
+            self.current_image = pygame.transform.rotozoom(pygame.image.load(self.anim[0]), -self.angle, self.scale)
+            self.holder_image = pygame.transform.rotozoom(pygame.image.load(self.anim[0]), 0, self.scale)
+
+            return True
+
+    def cool(self):
+        if self.coolDown > 0:
+            self.coolDown -= 0.1
+
+        if self.type == 1 and not self.mouse[1] and self.fireRate < 5:
+            self.fireRate += 0.1
+
+    def update_animation(self):
+        if self.anim_speed > 0:
+            self.anim_speed -= 0.1
+
+        if self.anim_speed <= 0:
+            self.holder_image = self.image
+            self.current_image = pygame.transform.rotate(self.holder_image, -self.angle)
+
+
+class Bullet(pygame.sprite.Sprite):
+    def __init__(self, img_src, speed, lifeTime, type_, damage, angle, pos):
+        super().__init__()
+        self.scale = 0.5
+        self.image = pygame.transform.rotozoom(pygame.image.load(img_src), 0, self.scale)
+
+        self.speed = speed
+
+        self.life = lifeTime
+
+        self.type = type_
+
+        self.damage = damage
+
+        self.angle = angle
+
+        self.pos = pygame.math.Vector2(pos[0], pos[1])
+
+        self.opacity = 300
+
+        self.image = pygame.transform.rotate(self.image, -self.angle)
+
+        self.pos[0] = self.pos[0] + (5 * math.cos(math.radians(self.angle)))
+        self.pos[1] = self.pos[1] + (5 * math.sin(math.radians(self.angle)))
+
+    def refresh(self):
+        self.move()
+        self.take_time()
+
+    def move(self):
+        self.pos[0] = self.pos[0] + (self.speed * math.cos(math.radians(self.angle)))
+        self.pos[1] = self.pos[1] + (self.speed * math.sin(math.radians(self.angle)))
+
+    def take_time(self):
+        if self.life > 0:
+            self.life -= 0.1
+        else:
+            self.opacity -= 10
