@@ -45,6 +45,9 @@ def goFishing():
             time.sleep(1)
             print(f"REACTION TIME: {total} seconds!")
             time.sleep(1)
-
-
-goFishing()
+        elif ans.upper() == "NO":
+            print("Exiting...")
+            time.sleep(1)
+            break
+        else:
+            print("Please enter yes or no.")

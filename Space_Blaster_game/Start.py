@@ -20,18 +20,123 @@ pygame.display.set_icon(winWidget)
 # -- Less Important Setup --
 background = pygame.transform.scale(pygame.image.load("Sprites/Backgrounds/bground1.svg"), (100, 100))
 
+plist = []
+phealth = []
 projectiles = []
+healthBars = []
+enemies = []
 
 level_start = False
 current_username = False
 
+i_frames = 0
+
 # --- Class Creation ---
-player = Player("Sprites/Player/basic ship.svg", ["Sprites/Player/basic ship2.svg"], [100, 500], 1, 5, 2, 5, 15, 10, True, [WIDTH, HEIGHT])
 
 
 # --- Update Loops ---
 def check_collision(danger, target):
     return danger.pos[0] < target.pos[0] + target.width and danger.pos[0] + danger.width > target.pos[0] and danger.pos[1] < target.pos[1] + target.height and danger.pos[1] + danger.height > target.pos[1]
+
+
+def check_collide():
+    for bull in projectiles:
+        if bull.type == "p":
+            pass
+        else:
+            for pl in plist:
+                pass
+
+
+def update_health(pos, health, index, offset):
+    healthBars[index].pos_x, healthBars[index].pos_y = pos[0] - healthBars[index].len/2, pos[1] - offset
+    healthBars[index].health = health
+    healthBars[index].update()
+
+
+def player_update_health(pos, health, index, offset):
+    phealth[index].pos_x, phealth[index].pos_y = pos[0] - phealth[index].len/2, pos[1] - offset
+    phealth[index].health = health
+    phealth[index].update()
+
+
+def update_player(screen):
+    count = 0
+    for p in plist:
+        p.screen_par = [c_w, c_h]
+        check = p.refresh()
+
+        global player_pos
+        player_pos = p.pos
+
+        global player_health
+        player_health = p.health
+
+        screen.blit(p.current_image, p.imOutline)
+
+        player_update_health(p.pos, p.health, count, p.image.get_height() + 10)
+
+        if hitBoxes:
+            pygame.draw.rect(screen, "red", p.hitBox, width=2)
+            pygame.draw.rect(screen, "green", p.imOutline, width=2)
+
+        if check:
+            if check[5] == "player":
+                create_projectile([check[4], "player"], check[1], check[0], p.imOutline.center,
+                                  p.angle + random.randint(-100, 100) / 10, check[2])
+
+        if p.health <= 0:
+            plist.pop(count)
+            print("player died")
+
+        count += 1
+
+        # this is just to test out damage
+        keys = pygame.key.get_pressed()
+
+        global i_frames
+
+        if keys[pygame.K_r] and i_frames <= 0:
+            p.take_damage(3)
+            i_frames += 1
+        elif i_frames > 0:
+            i_frames -= 0.1
+
+
+def update_enemies(screen):
+    count = 0
+
+    for enemy in enemies:
+        check = enemy.refresh()
+
+        screen.blit(enemy.current_image, enemy.imOutline)
+
+        update_health(enemy.pos, enemy.health, count, enemy.image.get_height() + 10)
+
+        if hitBoxes:
+            pygame.draw.rect(screen, "red", enemy.hitBox, width=2)
+            pygame.draw.rect(screen, "green", enemy.imOutline, width=2)
+
+        if check:
+            if check[5] == "enemy":
+                create_projectile([check[4], "enemy"], check[1], check[0], enemy.imOutline.center,
+                                  enemy.angle + random.randint(-100, 100) / 10, check[2])
+
+        if enemy.health <= 0:
+            enemies.pop(count)
+
+        count += 1
+
+        # this is just to test out damage
+        keys = pygame.key.get_pressed()
+
+        global i_frames
+
+        if keys[pygame.K_p] and i_frames <= 0:
+            enemy.take_damage(3)
+            i_frames += 1
+        elif i_frames > 0:
+            i_frames -= 0.1
 
 
 def update_projectile(screen):
@@ -42,6 +147,12 @@ def update_projectile(screen):
         pew.image.set_alpha(pew.opacity)
         screen.blit(pew.image, pew.pos)
 
+        if hitBoxes:
+            if pew.type == "player":
+                pygame.draw.rect(screen, "green", pew.hurtBox, width=2)
+            else:
+                pygame.draw.rect(screen, "red", pew.hurtBox, width=2)
+
         if pew.opacity <= 0:
             projectiles.pop(count)
             print("\b" * 9999, end="", flush=True)
@@ -51,11 +162,31 @@ def update_projectile(screen):
 
 
 # --- Create Functions ---
+def create_healthBar(type_, health, maxHealth, screen, pos):
+    bar = HealthBar(health, maxHealth, screen, pos[0], pos[1])
+
+    if type_ == "p":
+        phealth.append(bar)
+    else:
+        healthBars.append(bar)
+
+
+def create_player():
+    player = Player("Sprites/Player/basic ship.svg", ["Sprites/Player/basic ship2.svg"], [100, 500], 1, 5, 2, 5, 15, 10,
+                    True, [WIDTH, HEIGHT])
+    create_healthBar("p", player.health, player.maxHealth, screen, player.pos)
+    plist.append(player)
+
+
+def create_enemy(img, anim_paths, start_pos, type_, speed, fireRate, damage, bull_speed):
+    enemy = Enemy(img, anim_paths, start_pos, type_, speed, fireRate, damage, 20, bull_speed, False, [WIDTH, HEIGHT], 0.5, 50, 50)
+    enemies.append(enemy)
+    create_healthBar("e", enemy.health, enemy.maxHealth, screen, enemy.pos)
+
+
 def create_projectile(type_, speed, damage, pos, angle, lifeTime):
     projectile = Bullet(type_[0], speed, lifeTime, type_[1], damage, angle, pos)
     projectiles.append(projectile)
-    print("\b" * 9999, end="", flush=True)
-    print(f"{len(projectiles)}", end="")
 
 
 # --- Save Files ---
@@ -65,6 +196,10 @@ def save_current():
 
     print(len(file))
 
+
+# -- Test Area --
+create_player()
+create_enemy("Sprites/Enemies/Enemy1/common.svg", ["Sprites/Enemies/Enemy1/common2.svg"], [50, 50], "1", 5, 8, 10, 10)
 
 # Main game loop
 while running:
@@ -80,25 +215,23 @@ while running:
             if height < 500:
                 height = 500
 
-            player.screen_par = [width, height]
+            c_w, c_h = width, height
+
             screen = pygame.display.set_mode((width, height), pygame.HWSURFACE | pygame.DOUBLEBUF | pygame.RESIZABLE)
 
     # Update screen
     screen.fill((0, 0, 10))
 
     screen.blit(background, (0, 0))
-
-    screen.blit(player.current_image, player.imOutline)
-    pygame.draw.rect(screen, "red", player.hitBox, width=2)
-    pygame.draw.rect(screen, "green", player.imOutline, width=2)
     update_projectile(screen)
-    idk = player.refresh()
-
-    if idk:
-        create_projectile([idk[4], "player"], idk[1], idk[0], player.imOutline.center, player.angle + random.randint(-100, 100)/10, idk[2])
+    update_player(screen)
+    update_enemies(screen)
 
     pygame.display.update()
 
     clock.tick(FPS)
+
+    print("\b" * 9999, end="", flush=True)
+    print(f"Bullet count: {len(projectiles)} Player pos: {player_pos} Player Health: {player_health}", end="")
 
 pygame.quit()

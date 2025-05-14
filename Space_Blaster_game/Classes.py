@@ -5,7 +5,7 @@ import math
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, img_src, anim_srcs, pos, type_, mSpeed, fireRate, damage, bull_lifetime, bull_speed, controllable, screen_par, scale=0.4):
+    def __init__(self, img_src, anim_srcs, pos, type_, mSpeed, fireRate, damage, bull_lifetime, bull_speed, controllable, screen_par, scale=0.4, health=20, maxHealth=20):
         super().__init__()
 
         self.scale = scale
@@ -42,6 +42,9 @@ class Player(pygame.sprite.Sprite):
 
         self.screen_par = screen_par
 
+        self.health = health
+        self.maxHealth = maxHealth
+
     def refresh(self):
         self.user_input()
         self.rotation()
@@ -52,7 +55,7 @@ class Player(pygame.sprite.Sprite):
         self.update_animation()
 
         if fire_check:
-            return self.damage, self.bull_speed, self.bull_life, "1", "Sprites/Projectiles/costume1.svg"
+            return self.damage, self.bull_speed, self.bull_life, "1", "Sprites/Projectiles/costume1.svg", "player"
 
     def rotation(self):
         if not self.controllable == False and not self.type == 2:
@@ -174,6 +177,180 @@ class Player(pygame.sprite.Sprite):
             self.holder_image = self.image
             self.current_image = pygame.transform.rotate(self.holder_image, -self.angle)
 
+    def take_damage(self, receiving):
+        self.health -= receiving
+
+
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self, img_src, anim_srcs, pos, type_, mSpeed, fireRate, damage, bull_lifetime, bull_speed, controllable, screen_par, scale=0.4, health=20, maxHealth=20):
+        super().__init__()
+        self.scale = scale
+
+        self.image = pygame.transform.rotozoom(pygame.image.load(img_src), 0, self.scale)
+        self.current_image = self.image
+        self.holder_image = self.image
+
+        self.anim = anim_srcs
+        self.anim_speed = 0.5
+
+        self.pos = pygame.math.Vector2(pos[0], pos[1])
+        self.velX = 0
+        self.velY = 0
+        self.angle = 0
+
+        self.hitBox = self.image.get_rect(center=self.pos)
+        self.imOutline = self.hitBox.copy()
+
+        self.type = type_
+
+        self.mSpeed = mSpeed
+
+        self.fireRate = fireRate
+        self.coolDown = 0
+        self.damage = damage
+        self.bull_life = bull_lifetime
+        self.bull_speed = bull_speed
+
+        self.controllable = controllable
+
+        self.screen_par = screen_par
+
+        self.health = health
+        self.maxHealth = maxHealth
+
+        self.enter = False
+        self.turn = False
+        self.target_pos = [0, 0]
+        self.loop = 0
+
+        self.player_pos = [0, 0], []
+
+    def refresh(self):
+        self.move()
+        fire_check = self.fire_control()
+        self.cool()
+        self.update_animation()
+
+        if fire_check:
+            return self.damage, self.bull_speed, self.bull_life, "1", "Sprites/Projectiles/enemyBullet.svg", "enemy"
+
+    def rotate(self):
+        if self.controllable == "point":
+            self.player_pos[1][0] = (self.player_pos[0][0] - self.hitBox.centerx)
+            self.player_pos[1][0] = (self.player_pos[0][1] - self.hitBox.centery)
+
+            self.angle = math.degrees(math.atan2(self.mouse[2][1], self.mouse[2][0]))
+            self.current_image = pygame.transform.rotate(self.holder_image, -self.angle)
+            self.imOutline = self.current_image.get_rect(center=self.hitBox.center)
+
+    def move(self):
+        if self.type == "1":
+            if self.pos[0] > 1080 and self.enter == False:
+                self.pos[0] -= self.mSpeed
+            elif not self.enter:
+                self.enter = 1
+                self.controllable = "point"
+                self.loop = 30
+                self.mSpeed = 1
+            elif self.enter == 1 and self.loop > 0:
+                self.pos[0] -= self.mSpeed
+                self.loop -= 1
+            elif self.enter == 1:
+                self.enter = 2
+                self.loop = 50
+            elif self.enter == 2 and self.loop > 0:
+                self.mSpeed += 0.1
+                self.pos[0] -= self.mSpeed
+                self.loop -= 1
+            elif self.enter == 2:
+                self.enter = 3
+                self.loop = 100
+            elif self.enter == 3 and self.loop > 0:
+                self.pos[0] -= self.mSpeed
+                self.loop -= 1
+            elif self.enter == 3:
+                self.enter = 4
+                self.loop = 50
+            elif self.enter == 4 and self.loop > 0:
+                self.mSpeed -= 0.1
+                self.pos[0] -= self.mSpeed
+                self.loop -= 1
+            elif self.enter == 4:
+                self.enter = 5
+                self.loop = 20
+            elif self.enter == 5 and self.loop > 0:
+                self.loop -= 1
+            elif self.enter == 5:
+                self.enter = 6
+                self.mSpeed = 1
+                self.loop = 30
+            elif self.enter == 6 and self.loop > 0:
+                self.pos[0] += 1
+                self.loop -= 1
+            elif self.enter == 6:
+                self.enter = 7
+                self.loop = 50
+            elif self.enter == 7 and self.loop > 0:
+                self.mSpeed += 0.1
+                self.pos[0] += self.mSpeed
+                self.loop -= 1
+            elif self.enter == 7:
+                self.enter = 8
+                self.loop = 100
+            elif self.enter == 8 and self.loop > 0:
+                self.pos[0] += self.mSpeed
+                self.loop -= 1
+            elif self.enter == 8:
+                self.enter = 9
+                self.loop = 50
+            elif self.enter == 9 and self.loop > 0:
+                self.mSpeed -= 0.1
+                self.pos[0] += self.mSpeed
+                self.loop -= 1
+            elif self.enter == 9:
+                self.enter = 10
+                self.loop = 20
+            elif self.enter == 10 and self.loop > 0:
+                self.loop -= 1
+            elif self.enter == 10:
+                self.enter = 1
+                self.loop = 30
+                self.mSpeed = 1
+
+        if self.type == "2":
+            if self.pos[0] < -100:
+                self.pos[0] = 1280
+                self.pos[0] -= self.mSpeed
+
+        self.pos[0] += self.mSpeed
+
+    def fire_control(self):
+        if self.coolDown <= 0:
+            # backfire = random.randint(1, 100)
+
+            self.coolDown = self.fireRate
+
+            self.anim_speed = 0.5
+            self.current_image = pygame.transform.rotozoom(pygame.image.load(self.anim[0]), -self.angle, self.scale)
+            self.holder_image = pygame.transform.rotozoom(pygame.image.load(self.anim[0]), 0, self.scale)
+
+            return True
+
+    def cool(self):
+        if self.coolDown > 0:
+            self.coolDown -= 0.1
+
+    def update_animation(self):
+        if self.anim_speed > 0:
+            self.anim_speed -= 0.1
+
+        if self.anim_speed <= 0:
+            self.holder_image = self.image
+            self.current_image = pygame.transform.rotate(self.holder_image, -self.angle)
+
+    def take_damage(self, amount):
+        self.health -= amount
+
 
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, img_src, speed, lifeTime, type_, damage, angle, pos):
@@ -193,6 +370,9 @@ class Bullet(pygame.sprite.Sprite):
 
         self.pos = pygame.math.Vector2(pos[0], pos[1])
 
+        self.rect_stationary = self.image.get_rect(center=self.pos)
+        self.hurtBox = self.rect_stationary.copy()
+
         self.opacity = 300
 
         self.image = pygame.transform.rotate(self.image, -self.angle)
@@ -207,9 +387,53 @@ class Bullet(pygame.sprite.Sprite):
     def move(self):
         self.pos[0] = self.pos[0] + (self.speed * math.cos(math.radians(self.angle)))
         self.pos[1] = self.pos[1] + (self.speed * math.sin(math.radians(self.angle)))
+        self.rect_stationary.center = self.pos
+        self.hurtBox = self.image.get_rect(center=self.rect_stationary.center)
 
     def take_time(self):
         if self.life > 0:
             self.life -= 0.1
         else:
             self.opacity -= 10
+
+
+class HealthBar:
+    def __init__(self, health, max_health, screen, pos_x=10, pos_y=10, len_=700):
+        self.image = pygame.transform.rotozoom(pygame.image.load("Sprites/Extras/0.svg"), 0, 1.5)
+        self.health = health
+        self.mx_health = max_health
+        self.screen = screen
+        self.pos_x, self.pos_y = pos_x, pos_y
+        self.len = self.image.get_width()
+        self.height = self.image.get_height()
+        self.target_health = self.len
+        self.health_change_speed = 0.5
+
+        self.dmg_delay = 1
+
+    def show_bar(self):
+        shown = (self.health / self.mx_health) * self.len
+
+        self.screen.blit(self.image, (self.pos_x, self.pos_y))
+
+        # // Catchup Bar //
+        if shown != self.target_health:
+            if self.target_health > shown:
+                if self.dmg_delay <= 0:
+                    self.target_health -= self.health_change_speed
+                else:
+                    self.dmg_delay -= 0.1
+                pygame.draw.rect(self.screen, (250, 0, 0), (self.pos_x, self.pos_y, self.target_health, self.height))
+            else:
+                self.target_health = shown
+                self.dmg_delay = 1
+
+        # // Inner Bar //
+        pygame.draw.rect(self.screen, (0, 250, 0), (self.pos_x, self.pos_y, shown, self.height))
+
+    def down(self):
+        # This is just a test function to see if the healthBar actually works
+        self.health -= 1
+
+    def update(self):
+        self.show_bar()
