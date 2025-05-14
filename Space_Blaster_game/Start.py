@@ -1,7 +1,7 @@
 import pygame
 import random
 from Space_Blaster_game.Classes import *
-from Space_Blaster_game.Constants import *
+from Space_Blaster_game.Important_Variables import *
 
 pygame.init()
 
@@ -40,12 +40,23 @@ def check_collision(danger, target):
 
 
 def check_collide():
+    count = 0
     for bull in projectiles:
-        if bull.type == "p":
-            pass
-        else:
-            for pl in plist:
-                pass
+        if bull.opacity >= 100:
+            if bull.type == "player":
+                for i in enemies:
+                    temp = pygame.sprite.collide_rect(i, bull)
+                    if temp:
+                        i.take_damage(bull.damage)
+                        projectiles.pop(count)
+            else:
+                for pl in plist:
+                    temp = pygame.sprite.collide_rect(pl, bull)
+                    if temp:
+                        pl.take_damage(bull.damage)
+                        projectiles.pop(count)
+
+        count += 1
 
 
 def update_health(pos, health, index, offset):
@@ -101,6 +112,8 @@ def update_player(screen):
             i_frames += 1
         elif i_frames > 0:
             i_frames -= 0.1
+    if count == 0:
+        player_pos = [0, 0]
 
 
 def update_enemies(screen):
@@ -111,6 +124,8 @@ def update_enemies(screen):
 
         screen.blit(enemy.current_image, enemy.imOutline)
 
+        enemy.player_pos[0] = player_pos
+
         update_health(enemy.pos, enemy.health, count, enemy.image.get_height() + 10)
 
         if hitBoxes:
@@ -120,7 +135,7 @@ def update_enemies(screen):
         if check:
             if check[5] == "enemy":
                 create_projectile([check[4], "enemy"], check[1], check[0], enemy.imOutline.center,
-                                  enemy.angle + random.randint(-100, 100) / 10, check[2])
+                                  enemy.angle + random.randint(-50, 50) / 10, check[2])
 
         if enemy.health <= 0:
             enemies.pop(count)
@@ -179,7 +194,7 @@ def create_player():
 
 
 def create_enemy(img, anim_paths, start_pos, type_, speed, fireRate, damage, bull_speed):
-    enemy = Enemy(img, anim_paths, start_pos, type_, speed, fireRate, damage, 20, bull_speed, False, [WIDTH, HEIGHT], 0.5, 50, 50)
+    enemy = Enemy(img, anim_paths, start_pos, type_, speed, fireRate, damage, 10, bull_speed, True, [WIDTH, HEIGHT], 0.5, 50, 50)
     enemies.append(enemy)
     create_healthBar("e", enemy.health, enemy.maxHealth, screen, enemy.pos)
 
@@ -199,7 +214,8 @@ def save_current():
 
 # -- Test Area --
 create_player()
-create_enemy("Sprites/Enemies/Enemy1/common.svg", ["Sprites/Enemies/Enemy1/common2.svg"], [50, 50], "1", 5, 8, 10, 10)
+create_enemy("Sprites/Enemies/Enemy1/common.svg", ["Sprites/Enemies/Enemy1/common2.svg"], [50, 50], "1", 3, 4, 1, 5)
+create_enemy("Sprites/Enemies/Enemy1/common.svg", ["Sprites/Enemies/Enemy1/common2.svg"], [950, 50], "1", 3, 4, 1, 5)
 
 # Main game loop
 while running:
@@ -222,8 +238,8 @@ while running:
     # Update screen
     screen.fill((0, 0, 10))
 
-    screen.blit(background, (0, 0))
     update_projectile(screen)
+    check_collide()
     update_player(screen)
     update_enemies(screen)
 

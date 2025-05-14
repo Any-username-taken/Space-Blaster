@@ -24,6 +24,7 @@ class Player(pygame.sprite.Sprite):
 
         self.hitBox = self.image.get_rect(center=self.pos)
         self.imOutline = self.hitBox.copy()
+        self.rect = self.hitBox.copy()
 
         self.type = type_
 
@@ -67,12 +68,14 @@ class Player(pygame.sprite.Sprite):
             self.angle = math.degrees(math.atan2(self.mouse[2][1], self.mouse[2][0]))
             self.current_image = pygame.transform.rotate(self.holder_image, -self.angle)
             self.imOutline = self.current_image.get_rect(center=self.hitBox.center)
+            self.rect = self.imOutline.copy()
 
     def movement(self):
         if self.controllable:
             self.pos += pygame.math.Vector2(self.velX, self.velY)
             self.hitBox.center = self.pos
             self.imOutline.center = self.hitBox.center
+            self.rect = self.imOutline.copy()
 
         # Screen wrap top - bottom
 
@@ -200,18 +203,19 @@ class Enemy(pygame.sprite.Sprite):
 
         self.hitBox = self.image.get_rect(center=self.pos)
         self.imOutline = self.hitBox.copy()
+        self.rect = self.hitBox.copy()
 
         self.type = type_
 
-        self.mSpeed = mSpeed
+        self.mSpeed = -mSpeed
 
         self.fireRate = fireRate
-        self.coolDown = 0
+        self.coolDown = fireRate
         self.damage = damage
         self.bull_life = bull_lifetime
         self.bull_speed = bull_speed
 
-        self.controllable = controllable
+        self.rotation = controllable
 
         self.screen_par = screen_par
 
@@ -223,10 +227,11 @@ class Enemy(pygame.sprite.Sprite):
         self.target_pos = [0, 0]
         self.loop = 0
 
-        self.player_pos = [0, 0], []
+        self.player_pos = [[0, 0], [0, 0]]
 
     def refresh(self):
         self.move()
+        self.rotate()
         fire_check = self.fire_control()
         self.cool()
         self.update_animation()
@@ -235,94 +240,27 @@ class Enemy(pygame.sprite.Sprite):
             return self.damage, self.bull_speed, self.bull_life, "1", "Sprites/Projectiles/enemyBullet.svg", "enemy"
 
     def rotate(self):
-        if self.controllable == "point":
+        if self.rotation:
             self.player_pos[1][0] = (self.player_pos[0][0] - self.hitBox.centerx)
-            self.player_pos[1][0] = (self.player_pos[0][1] - self.hitBox.centery)
+            self.player_pos[1][1] = (self.player_pos[0][1] - self.hitBox.centery)
 
-            self.angle = math.degrees(math.atan2(self.mouse[2][1], self.mouse[2][0]))
+            self.angle = math.degrees(math.atan2(self.player_pos[1][1], self.player_pos[1][0]))
             self.current_image = pygame.transform.rotate(self.holder_image, -self.angle)
             self.imOutline = self.current_image.get_rect(center=self.hitBox.center)
+            self.rect = self.imOutline.copy()
 
     def move(self):
+        self.pos += pygame.math.Vector2(self.velX, self.velY)
+        self.hitBox.center = self.pos
+        self.imOutline.center = self.hitBox.center
+        self.rect = self.imOutline.copy()
         if self.type == "1":
-            if self.pos[0] > 1080 and self.enter == False:
-                self.pos[0] -= self.mSpeed
-            elif not self.enter:
-                self.enter = 1
-                self.controllable = "point"
-                self.loop = 30
-                self.mSpeed = 1
-            elif self.enter == 1 and self.loop > 0:
-                self.pos[0] -= self.mSpeed
-                self.loop -= 1
-            elif self.enter == 1:
-                self.enter = 2
-                self.loop = 50
-            elif self.enter == 2 and self.loop > 0:
-                self.mSpeed += 0.1
-                self.pos[0] -= self.mSpeed
-                self.loop -= 1
-            elif self.enter == 2:
-                self.enter = 3
-                self.loop = 100
-            elif self.enter == 3 and self.loop > 0:
-                self.pos[0] -= self.mSpeed
-                self.loop -= 1
-            elif self.enter == 3:
-                self.enter = 4
-                self.loop = 50
-            elif self.enter == 4 and self.loop > 0:
-                self.mSpeed -= 0.1
-                self.pos[0] -= self.mSpeed
-                self.loop -= 1
-            elif self.enter == 4:
-                self.enter = 5
-                self.loop = 20
-            elif self.enter == 5 and self.loop > 0:
-                self.loop -= 1
-            elif self.enter == 5:
-                self.enter = 6
-                self.mSpeed = 1
-                self.loop = 30
-            elif self.enter == 6 and self.loop > 0:
-                self.pos[0] += 1
-                self.loop -= 1
-            elif self.enter == 6:
-                self.enter = 7
-                self.loop = 50
-            elif self.enter == 7 and self.loop > 0:
-                self.mSpeed += 0.1
-                self.pos[0] += self.mSpeed
-                self.loop -= 1
-            elif self.enter == 7:
-                self.enter = 8
-                self.loop = 100
-            elif self.enter == 8 and self.loop > 0:
-                self.pos[0] += self.mSpeed
-                self.loop -= 1
-            elif self.enter == 8:
-                self.enter = 9
-                self.loop = 50
-            elif self.enter == 9 and self.loop > 0:
-                self.mSpeed -= 0.1
-                self.pos[0] += self.mSpeed
-                self.loop -= 1
-            elif self.enter == 9:
-                self.enter = 10
-                self.loop = 20
-            elif self.enter == 10 and self.loop > 0:
-                self.loop -= 1
-            elif self.enter == 10:
-                self.enter = 1
-                self.loop = 30
-                self.mSpeed = 1
+            pass
 
         if self.type == "2":
             if self.pos[0] < -100:
                 self.pos[0] = 1280
                 self.pos[0] -= self.mSpeed
-
-        self.pos[0] += self.mSpeed
 
     def fire_control(self):
         if self.coolDown <= 0:
@@ -357,6 +295,7 @@ class Bullet(pygame.sprite.Sprite):
         super().__init__()
         self.scale = 0.5
         self.image = pygame.transform.rotozoom(pygame.image.load(img_src), 0, self.scale)
+        self.holderImage = self.image.copy()
 
         self.speed = speed
 
@@ -372,15 +311,15 @@ class Bullet(pygame.sprite.Sprite):
 
         self.rect_stationary = self.image.get_rect(center=self.pos)
         self.hurtBox = self.rect_stationary.copy()
+        self.rect = self.rect_stationary.copy()
 
         self.opacity = 300
-
-        self.image = pygame.transform.rotate(self.image, -self.angle)
 
         self.pos[0] = self.pos[0] + (5 * math.cos(math.radians(self.angle)))
         self.pos[1] = self.pos[1] + (5 * math.sin(math.radians(self.angle)))
 
     def refresh(self):
+        self.rotate()
         self.move()
         self.take_time()
 
@@ -389,6 +328,12 @@ class Bullet(pygame.sprite.Sprite):
         self.pos[1] = self.pos[1] + (self.speed * math.sin(math.radians(self.angle)))
         self.rect_stationary.center = self.pos
         self.hurtBox = self.image.get_rect(center=self.rect_stationary.center)
+        self.rect = self.hurtBox.copy()
+
+    def rotate(self):
+        self.image = pygame.transform.rotate(self.holderImage, -self.angle)
+        self.hurtBox = self.image.get_rect(center=self.rect_stationary.center)
+        self.rect = self.hurtBox.copy()
 
     def take_time(self):
         if self.life > 0:
