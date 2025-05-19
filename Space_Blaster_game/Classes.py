@@ -185,7 +185,7 @@ class Player(pygame.sprite.Sprite):
 
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, img_src, anim_srcs, pos, type_, mSpeed, fireRate, damage, bull_lifetime, bull_speed, controllable, screen_par, scale=0.4, health=20, maxHealth=20):
+    def __init__(self, img_src, anim_srcs, pos, type_, mSpeed, fireRate, damage, bull_lifetime, bull_speed, controllable, screen_par, scale=0.4, health=20, maxHealth=20, angle=180):
         super().__init__()
         self.scale = scale
 
@@ -199,7 +199,7 @@ class Enemy(pygame.sprite.Sprite):
         self.pos = pygame.math.Vector2(pos[0], pos[1])
         self.velX = 0
         self.velY = 0
-        self.angle = 0
+        self.angle = angle
 
         self.hitBox = self.image.get_rect(center=self.pos)
         self.imOutline = self.hitBox.copy()
@@ -258,9 +258,11 @@ class Enemy(pygame.sprite.Sprite):
             pass
 
         if self.type == "2":
-            if self.pos[0] < -100:
-                self.pos[0] = 1280
-                self.pos[0] -= self.mSpeed
+            self.rotation = False
+            if self.pos[0] > -100:
+                self.pos[0] += self.mSpeed
+            else:
+                self.pos[0] = 1280 + 100
 
     def fire_control(self):
         if self.coolDown <= 0:

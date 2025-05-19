@@ -4,7 +4,7 @@ HEIGHT = 720
 FPS = 60
 delta_time = 0.1
 # I will try to add delta time, but doubt this will happen
-hitBoxes = False
+hitBoxes = True
 
 
 c_w = WIDTH

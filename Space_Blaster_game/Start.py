@@ -193,8 +193,8 @@ def create_player():
     plist.append(player)
 
 
-def create_enemy(img, anim_paths, start_pos, type_, speed, fireRate, damage, bull_speed):
-    enemy = Enemy(img, anim_paths, start_pos, type_, speed, fireRate, damage, 10, bull_speed, True, [WIDTH, HEIGHT], 0.5, 50, 50)
+def create_enemy(img, anim_paths, start_pos, type_, speed, fireRate, damage, bull_speed, scale, starting_angle=180, health=50, max_health=50):
+    enemy = Enemy(img, anim_paths, start_pos, type_, speed, fireRate, damage, 15, bull_speed, True, [WIDTH, HEIGHT], scale, health, max_health, starting_angle)
     enemies.append(enemy)
     create_healthBar("e", enemy.health, enemy.maxHealth, screen, enemy.pos)
 
@@ -214,8 +214,9 @@ def save_current():
 
 # -- Test Area --
 create_player()
-create_enemy("Sprites/Enemies/Enemy1/common.svg", ["Sprites/Enemies/Enemy1/common2.svg"], [50, 50], "1", 3, 4, 1, 5)
-create_enemy("Sprites/Enemies/Enemy1/common.svg", ["Sprites/Enemies/Enemy1/common2.svg"], [950, 50], "1", 3, 4, 1, 5)
+create_enemy("Sprites/Enemies/Enemy1/common.svg", ["Sprites/Enemies/Enemy1/common2.svg"], [50, 50], "1", 3, 10, 1, 7, 0.5)
+create_enemy("Sprites/Enemies/Enemy2/basic.svg", ["Sprites/Enemies/Enemy2/basic2.svg"], [1380, 500], "2", 2, 10, 1, 7, 0.7, 180, 150, 150)
+create_enemy("Sprites/Enemies/Enemy2/basic.svg", ["Sprites/Enemies/Enemy2/basic2.svg"], [1380, 200], "2", 2, 10, 1, 7, 0.7, 180, 150, 150)
 
 # Main game loop
 while running:

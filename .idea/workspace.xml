@@ -5,9 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="146e4e39-37df-4227-bfe3-6990b5a24538" name="Changes" comment="Just some new updates">
+      <change afterPath="$PROJECT_DIR$/Space_Blaster_game/Sprites/Enemies/Enemy2/basic.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Space_Blaster_game/Sprites/Enemies/Enemy2/basic2.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Classes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Constants.py" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Constants.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Important_Variables.py" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Important_Variables.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Start.py" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Start.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -40,11 +42,11 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites\Enemies\Enemy2" />
       <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites\Extras" />
       <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites\Backgrounds" />
       <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites\Enemies\Enemy1" />
       <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\OtherImg" />
-      <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game" />
     </key>
   </component>
   <component name="SharedIndexes">
@@ -135,7 +137,15 @@
       <option name="project" value="LOCAL" />
       <updated>1747202115122</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Just some new updates">
+      <option name="closed" value="true" />
+      <created>1747266646816</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1747266646816</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
