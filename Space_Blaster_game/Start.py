@@ -17,6 +17,8 @@ pygame.display.set_caption("Space Blaster")
 winWidget = pygame.image.load("OtherImg/window widget.svg")
 pygame.display.set_icon(winWidget)
 
+spawn = []
+
 # -- Less Important Setup --
 background = pygame.transform.scale(pygame.image.load("Sprites/Backgrounds/bground1.svg"), (100, 100))
 
@@ -25,8 +27,8 @@ phealth = []
 projectiles = []
 healthBars = []
 enemies = []
+deaths = []
 
-level_start = False
 current_username = False
 
 i_frames = 0
@@ -40,6 +42,8 @@ def check_collision(danger, target):
 
 
 def check_collide():
+    # Remember to come back to add mine explosions, target list is deaths[]
+
     count = 0
     for bull in projectiles:
         if bull.opacity >= 100:
@@ -96,10 +100,6 @@ def update_player(screen):
                 create_projectile([check[4], "player"], check[1], check[0], p.imOutline.center,
                                   p.angle + random.randint(-100, 100) / 10, check[2])
 
-        if p.health <= 0:
-            plist.pop(count)
-            print("player died")
-
         count += 1
 
         # this is just to test out damage
@@ -112,8 +112,21 @@ def update_player(screen):
             i_frames += 1
         elif i_frames > 0:
             i_frames -= 0.1
+
+    count = 0
+
+    for p in plist:
+        try:
+            if p.health <= 0:
+                create_death(p.pos, "s")
+                phealth.pop(count)
+                plist.pop(count)
+            count += 1
+        except IndexError:
+            pass
+
     if count == 0:
-        player_pos = [0, 0]
+        pass
 
 
 def update_enemies(screen):
@@ -137,9 +150,6 @@ def update_enemies(screen):
                 create_projectile([check[4], "enemy"], check[1], check[0], enemy.imOutline.center,
                                   enemy.angle + random.randint(-50, 50) / 10, check[2])
 
-        if enemy.health <= 0:
-            enemies.pop(count)
-
         count += 1
 
         # this is just to test out damage
@@ -148,10 +158,22 @@ def update_enemies(screen):
         global i_frames
 
         if keys[pygame.K_p] and i_frames <= 0:
-            enemy.take_damage(3)
+            enemy.take_damage(5)
             i_frames += 1
         elif i_frames > 0:
             i_frames -= 0.1
+
+    count = 0
+
+    for enemy in enemies:
+        try:
+            if enemy.health <= 0:
+                create_death(enemy.pos, "s")
+                healthBars.pop(count)
+                enemies.pop(count)
+            count += 1
+        except IndexError:
+            pass
 
 
 def update_projectile(screen):
@@ -168,12 +190,46 @@ def update_projectile(screen):
             else:
                 pygame.draw.rect(screen, "red", pew.hurtBox, width=2)
 
-        if pew.opacity <= 0:
-            projectiles.pop(count)
-            print("\b" * 9999, end="", flush=True)
-            print(f"{len(projectiles)}", end="")
+        count += 1
+
+    count = 0
+
+    for pew in projectiles:
+        try:
+            if pew.opacity <= 0:
+                projectiles.pop(count)
+
+            count += 1
+        except IndexError:
+            pass
+
+
+def update_deaths(screen):
+    count = 0
+    for boom in deaths:
+        boom.refresh()
+
+        boom.image.set_alpha(boom.opacity)
+        screen.blit(boom.image, boom.pos)
+
+        if hitBoxes:
+            if boom.type == "p":
+                pygame.draw.rect(screen, "green", boom.hurtBox, width=2)
+            else:
+                pygame.draw.rect(screen, "red", boom.hurtBox, width=2)
 
         count += 1
+
+    count = 0
+
+    for boom in projectiles:
+        try:
+            if boom.opacity <= 0:
+                deaths.pop(count)
+
+            count += 1
+        except IndexError:
+            pass
 
 
 # --- Create Functions ---
@@ -187,8 +243,8 @@ def create_healthBar(type_, health, maxHealth, screen, pos):
 
 
 def create_player():
-    player = Player("Sprites/Player/basic ship.svg", ["Sprites/Player/basic ship2.svg"], [100, 500], 1, 5, 2, 5, 15, 10,
-                    True, [WIDTH, HEIGHT])
+    player = Player("Sprites/Player/basic ship.svg", ["Sprites/Player/basic ship2.svg"], [-100, 360], 1, 4.5, 2, 5, 15, 10,
+                    False, [WIDTH, HEIGHT])
     create_healthBar("p", player.health, player.maxHealth, screen, player.pos)
     plist.append(player)
 
@@ -204,19 +260,213 @@ def create_projectile(type_, speed, damage, pos, angle, lifeTime):
     projectiles.append(projectile)
 
 
-# --- Save Files ---
-def save_current():
-    with open("Text/Important_text/saves.txt") as file:
-        file = file.read().split("|")
+def create_death(pos, type_):
+    if type_ == "s":
+        death = Deaths("s", "Sprites/Extras/Deaths/EXPLOSION small.svg", pos)
+        deaths.append(death)
+    elif type_ == "minePlayer":
+        death = Deaths("p", "Sprites/Extras/Deaths/EXPLOSION small.svg", pos)
+        deaths.append(death)
+    elif type_ == "mineEnemy":
+        death = Deaths("e", "Sprites/Extras/Deaths/EXPLOSION small.svg", pos)
+        deaths.append(death)
 
-    print(len(file))
+
+# --- Enemy Spawner ---
+def spawn_queue():
+    if len(spawn):
+        if spawn[0][1] > 0:
+            spawn[0][1] -= 0.1
+        else:
+            create_enemy(spawn[0][0][0], spawn[0][0][1], spawn[0][0][2], spawn[0][0][3], spawn[0][0][4], spawn[0][0][5], spawn[0][0][6], spawn[0][0][7], spawn[0][0][8], spawn[0][0][9], spawn[0][0][10], spawn[0][0][11])
+            spawn.pop(0)
+
+
+def enemy_presets(type_, formation):
+    # 1st Image, [collection of images here], [posX, posY], type, speed, fire rate, damage, bullet speed, scale, angle,
+    # health, max health
+    if type_ == "1":
+        if formation == "1":
+            spawn.append([["Sprites/Enemies/Enemy1/common.svg", ["Sprites/Enemies/Enemy1/common2.svg"], [1380, 360], "1", 3, 30, 1, 5, 0.5, 180, 50, 50], 0])
+            spawn.append([["Sprites/Enemies/Enemy1/common.svg", ["Sprites/Enemies/Enemy1/common2.svg"], [1380, 460], "1", 3, 30, 1, 5, 0.5, 180, 50, 50], 5])
+            spawn.append([["Sprites/Enemies/Enemy1/common.svg", ["Sprites/Enemies/Enemy1/common2.svg"], [1380, 260], "1", 3, 30, 1, 5, 0.5, 180, 50, 50], 0])
+        elif formation == "2":
+            spawn.append([["Sprites/Enemies/Enemy1/common.svg", ["Sprites/Enemies/Enemy1/common2.svg"], [1380, 50],
+                           "1", 3, 30, 1, 5, 0.5, 180, 50, 50], 0])
+            spawn.append([["Sprites/Enemies/Enemy1/common.svg", ["Sprites/Enemies/Enemy1/common2.svg"], [1380, 120],
+                           "1", 3, 30, 1, 5, 0.5, 180, 50, 50], 3])
+            spawn.append([["Sprites/Enemies/Enemy1/common.svg", ["Sprites/Enemies/Enemy1/common2.svg"], [1380, 190],
+                           "1", 3, 30, 1, 5, 0.5, 180, 50, 50], 3])
+            spawn.append([["Sprites/Enemies/Enemy1/common.svg", ["Sprites/Enemies/Enemy1/common2.svg"], [1380, 670],
+                           "1", 3, 30, 1, 5, 0.5, 180, 50, 50], 10])
+            spawn.append([["Sprites/Enemies/Enemy1/common.svg", ["Sprites/Enemies/Enemy1/common2.svg"], [1380, 600],
+                           "1", 3, 30, 1, 5, 0.5, 180, 50, 50], 3])
+            spawn.append([["Sprites/Enemies/Enemy1/common.svg", ["Sprites/Enemies/Enemy1/common2.svg"], [1380, 530],
+                           "1", 3, 30, 1, 5, 0.5, 180, 50, 50], 3])
+        elif formation == "3":
+            spawn.append([["Sprites/Enemies/Enemy1/common.svg", ["Sprites/Enemies/Enemy1/common2.svg"], [1380, 360],
+                           "1", 3, 30, 1, 5, 0.5, 180, 50, 50], 0])
+            spawn.append([["Sprites/Enemies/Enemy1/common.svg", ["Sprites/Enemies/Enemy1/common2.svg"], [1380, 460],
+                           "1", 3, 30, 1, 5, 0.5, 180, 50, 50], 5])
+            spawn.append([["Sprites/Enemies/Enemy1/common.svg", ["Sprites/Enemies/Enemy1/common2.svg"], [1380, 260],
+                           "1", 3, 30, 1, 5, 0.5, 180, 50, 50], 0])
+            spawn.append([["Sprites/Enemies/Enemy1/common.svg", ["Sprites/Enemies/Enemy1/common2.svg"], [1380, 560],
+                           "1", 3, 30, 1, 5, 0.5, 180, 50, 50], 5])
+            spawn.append([["Sprites/Enemies/Enemy1/common.svg", ["Sprites/Enemies/Enemy1/common2.svg"], [1380, 160],
+                           "1", 3, 30, 1, 5, 0.5, 180, 50, 50], 0])
+        else:
+            print("ERROR! Formation not found!")
+    elif type_ == "2":
+        if formation == "1":
+            spawn.append([["Sprites/Enemies/Enemy2/basic.svg", ["Sprites/Enemies/Enemy2/basic2.svg"], [1380, 360], "2", 2, 10, 2, 5, 0.7, 180, 150, 150], 0])
+            spawn.append([["Sprites/Enemies/Enemy2/basic.svg", ["Sprites/Enemies/Enemy2/basic2.svg"], [1380, 460], "2",
+                           2, 10, 2, 5, 0.7, 180, 150, 150], 5])
+            spawn.append([["Sprites/Enemies/Enemy2/basic.svg", ["Sprites/Enemies/Enemy2/basic2.svg"], [1380, 260], "2",
+                           2, 10, 2, 5, 0.7, 180, 150, 150], 0])
+        elif formation == "2":
+            spawn.append([["Sprites/Enemies/Enemy2/basic.svg", ["Sprites/Enemies/Enemy2/basic2.svg"], [1380, 70], "2",
+                           2, 10, 2, 5, 0.7, 180, 150, 150], 0])
+            spawn.append([["Sprites/Enemies/Enemy2/basic.svg", ["Sprites/Enemies/Enemy2/basic2.svg"], [1380, 650], "2",
+                           2, 10, 2, 5, 0.7, 180, 150, 150], 0])
+        else:
+            print("ERROR! Formation not found!")
+    else:
+        print("ERROR! Enemy not found!")
+
+
+def level_reader(world):
+    global level_complete
+
+    if level_complete:
+        return
+
+    with open("Text/Important_text/Too_lazy_to_make_efficient_level_thing_so_Im_making_this.txt", "r") as lines:
+        wave, timer, min_e, complete, time_until = lines.read().split("\n")
+        wave = int(wave)
+        timer = float(timer)
+        min_e = int(min_e)
+        complete = int(complete)
+        time_until = float(time_until)
+
+    print("\b" * 9999, end="", flush=True)
+    print(f"Wave: {wave} Timer: {timer} Minimum Enemy: {min_e} Wave Completed: {complete} Time Until: {time_until}", end="")
+
+    try:
+        if world[wave] == "pass":
+            pass
+    except IndexError:
+        return
+
+    if time_until > 0:
+        time_until -= 0.1
+        file = open("Text/Important_text/Too_lazy_to_make_efficient_level_thing_so_Im_making_this.txt", "w")
+        file.write(f"{wave}\n{world[wave].split("/")[3]}\n{world[wave].split("/")[2]}\n{complete}\n{time_until}")
+        file.close()
+        return
+    else:
+        pass
+
+    if complete:
+        if world[wave].split("/")[4] == "C":
+            if min_e >= 0:
+                if len(enemies) <= min_e:
+                    if wave == len(world):
+                        wave += 1
+                        file = open("Text/Important_text/Too_lazy_to_make_efficient_level_thing_so_Im_making_this.txt", "w")
+                        file.write(f"{wave}\n0\n0\n0\n0")
+                        file.close()
+
+                        level_complete = True
+                    else:
+                        wave += 1
+
+                        file = open("Text/Important_text/Too_lazy_to_make_efficient_level_thing_so_Im_making_this.txt", "w")
+                        file.write(f"{wave}\n{world[wave].split("/")[3]}\n{world[wave].split("/")[2]}\n0\n0")
+                        file.close()
+            if timer == -5:
+                print("Running", end="")
+                pass
+            elif timer > 0:
+                timer -= 0.1
+                file = open("Text/Important_text/Too_lazy_to_make_efficient_level_thing_so_Im_making_this.txt", "w")
+                file.write(f"{wave}\n{timer}\n{world[wave].split("/")[2]}\n{complete}\n0")
+                file.close()
+            else:
+                if wave == len(world):
+                    wave += 1
+
+                    file = open("Text/Important_text/Too_lazy_to_make_efficient_level_thing_so_Im_making_this.txt", "w")
+                    file.write(f"{wave}\n0\n0\n0\n0")
+                    file.close()
+
+                    level_complete = True
+                else:
+                    wave += 1
+
+                    file = open("Text/Important_text/Too_lazy_to_make_efficient_level_thing_so_Im_making_this.txt", "w")
+                    file.write(f"{wave}\n{world[wave].split("/")[3]}\n{world[wave].split("/")[2]}\n0\n0")
+                    file.close()
+        else:
+            if len(enemies) <= 0:
+                if wave == len(world) - 1:
+                    wave += 1
+                    file = open("Text/Important_text/Too_lazy_to_make_efficient_level_thing_so_Im_making_this.txt", "w")
+                    file.write(f"{wave}\n0\n0\n0\n8")
+                    file.close()
+
+                    level_complete = True
+                else:
+                    wave += 1
+
+                    file = open("Text/Important_text/Too_lazy_to_make_efficient_level_thing_so_Im_making_this.txt", "w")
+                    file.write(f"{wave}\n{world[wave].split("/")[3]}\n{world[wave].split("/")[2]}\n0\n8")
+                    file.close()
+
+    else:
+        enemy_presets(world[wave].split("/")[0], world[wave].split("/")[1])
+        file = open("Text/Important_text/Too_lazy_to_make_efficient_level_thing_so_Im_making_this.txt", "w")
+        file.write(f"{wave}\n{world[wave].split("/")[3]}\n{world[wave].split("/")[2]}\n1\n0")
+        file.close()
+
+
+# --- Save Files ---
+def open_levels(world):
+    with open("Text/Important_text/levels.txt", "r") as lines:
+        lines = lines.read().split("|")
+
+    lines.pop(0)
+
+    var = False
+    for i in lines:
+        if world == i.split("\n")[1]:
+
+            var = i
+
+    if len(var.split("\n")) > 4:
+        # Trust me when I say that this part is totally necessary
+        var = var.split("\n")
+        var.pop(0)
+        var.pop(0)
+        var.pop(-1)
+        print("Found star system.")
+        print(f"Result: \033[92m{var}\033[0m")
+        file = open("Text/Important_text/Too_lazy_to_make_efficient_level_thing_so_Im_making_this.txt", "w")
+        file.write(f"0\n{var[0].split("/")[1]}\n{var[0].split("/")[2]}\n0\n8")
+        # 1st one is wave, second one is timer, third one is minimum enemy,
+        # fourth one is completed (0 = False, 1 = True), 5th one is timer till next wave
+        file.close()
+        return var
+    else:
+        print("ERROR! Levels not found!")
+        print(f"Result: \033[91m{var}\033[0m")
 
 
 # -- Test Area --
 create_player()
-create_enemy("Sprites/Enemies/Enemy1/common.svg", ["Sprites/Enemies/Enemy1/common2.svg"], [50, 50], "1", 3, 10, 1, 7, 0.5)
-create_enemy("Sprites/Enemies/Enemy2/basic.svg", ["Sprites/Enemies/Enemy2/basic2.svg"], [1380, 500], "2", 2, 10, 1, 7, 0.7, 180, 150, 150)
-create_enemy("Sprites/Enemies/Enemy2/basic.svg", ["Sprites/Enemies/Enemy2/basic2.svg"], [1380, 200], "2", 2, 10, 1, 7, 0.7, 180, 150, 150)
+
+world = open_levels("S1")
+
+stars = pygame.transform.rotozoom(pygame.image.load("Sprites/Extras/Backgrounds/Star Preset1.svg"), 0, 2.7)
 
 # Main game loop
 while running:
@@ -237,18 +487,29 @@ while running:
             screen = pygame.display.set_mode((width, height), pygame.HWSURFACE | pygame.DOUBLEBUF | pygame.RESIZABLE)
 
     # Update screen
-    screen.fill((0, 0, 10))
+    if not game_pause and level_start:
+        screen.fill((0, 0, 10))
 
-    update_projectile(screen)
-    check_collide()
-    update_player(screen)
-    update_enemies(screen)
+        screen.blit(stars, [0, -100])
 
-    pygame.display.update()
+        level_reader(world)
+
+        spawn_queue()
+
+        update_projectile(screen)
+
+        check_collide()
+
+        update_player(screen)
+        update_enemies(screen)
+
+        update_deaths(screen)
+
+        pygame.display.update()
 
     clock.tick(FPS)
 
-    print("\b" * 9999, end="", flush=True)
-    print(f"Bullet count: {len(projectiles)} Player pos: {player_pos} Player Health: {player_health}", end="")
+    # print("\b" * 9999, end="", flush=True)
+    # print(f"Health Bar count: [{len(healthBars)}] [{len(phealth)}]", end="")
 
 pygame.quit()

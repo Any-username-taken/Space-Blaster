@@ -8,6 +8,7 @@ Upgrades: [Upgrade1, Upgrade2] (If there is nothing here, just returns empty)
 Star system Unlock: [False, False, False, False, False, False] (False if locked, True if Unlocked.)
 Perm xp: (Number of xp for permanent upgrades)
 Perm Upgrades: []
+also that spb thing is split character. Don't forget the ---
 
 ILLEGAL CHARACTERS
-\ , . [ ] ( ) ` ' " ~ ; & ^ % $ # @ * = + / ? : < > |
+spb---\ , . [ ] ( ) ` ' " ~ ; & ^ % $ # @ * = + / ? : < > |

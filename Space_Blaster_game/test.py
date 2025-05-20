@@ -51,3 +51,9 @@ def goFishing():
             break
         else:
             print("Please enter yes or no.")
+
+
+if 0.0000000000000000000001:
+    print("yes")
+else:
+    print("no")

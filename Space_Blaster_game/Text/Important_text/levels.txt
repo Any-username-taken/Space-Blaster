@@ -21,15 +21,22 @@ Timer till next wave, doesn't work on last wave. Set to negative to rely only on
 negative bro. Like come on.
 
 Continue:
-Bool checking if next wave can be spawned without any special conditions. If True, next wave will spawn, if False, waits
+Value checking if next wave can be spawned without any special conditions. If True, next wave will spawn, if False, waits
 until all enemies are dead. Can be set to U for shops, or if when I add the upgrade system and do something different,
 make it events. (CURRENT Continue VALUES: C(ontinue), S(top), U(pgrade/event))
+
+False:
+Checks if line ran already. Prevents a continuous loop.
 
 Split star systems by bar line, Splits waves/levels by \n, Splits custom enemy preset by -
 
 |
 S1
-2/1/0/50/C/1
-2/2/0/0/S/End
-1/1/0/0/S/2/End
+1/2/0/0/C/False
+2/1/0/0/S/False
+1/1/-5/10/C/False
+1/2/-5/55/C/False
+2/1/0/14/C/False
+2/2/0/0/S/False
 |
+S2

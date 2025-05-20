@@ -5,12 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="146e4e39-37df-4227-bfe3-6990b5a24538" name="Changes" comment="Just some new updates">
-      <change afterPath="$PROJECT_DIR$/Space_Blaster_game/Sprites/Enemies/Enemy2/basic.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Space_Blaster_game/Sprites/Enemies/Enemy2/basic2.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Space_Blaster_game/Sprites/Extras/Backgrounds/Star Preset1.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Space_Blaster_game/Sprites/Extras/Deaths/EXPLOSION small.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Space_Blaster_game/Text/Important_text/Too_lazy_to_make_efficient_level_thing_so_Im_making_this.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Classes.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Important_Variables.py" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Important_Variables.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Start.py" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Start.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Text/Important_text/levels.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Text/Important_text/levels.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Text/Important_text/saves.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Text/Important_text/saves.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Text/Important_text/saves_info.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Text/Important_text/saves_info.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Space_Blaster_game/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,17 +42,42 @@
     &quot;Python.test.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/deetr/Downloads/image_2025-05-07_163620428.svg&quot;
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/deetr/PycharmProjects/Space_Blaster/Space_Blaster_game&quot;
   }
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites\Enemies\Enemy2" />
+      <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites\Extras\Backgrounds" />
       <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites\Extras" />
+      <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites\Extras\Deaths" />
+      <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites\Enemies\Enemy2" />
       <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites\Backgrounds" />
-      <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites\Enemies\Enemy1" />
-      <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\OtherImg" />
     </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="Start" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="Space_Blaster" />
+      <option name="ENV_FILES" value="$PROJECT_DIR$/Space_Blaster_game/Start.py" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Python 3.12 (Space_Blaster)" />
+      <option name="WORKING_DIRECTORY" value="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="Start.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -145,7 +175,15 @@
       <option name="project" value="LOCAL" />
       <updated>1747266646816</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Just some new updates">
+      <option name="closed" value="true" />
+      <created>1747683929481</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1747683929481</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

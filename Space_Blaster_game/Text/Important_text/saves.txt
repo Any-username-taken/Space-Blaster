@@ -1,16 +1,10 @@
+As per my own made up tradition, I will delete the first split.
+Username
+type ship
+
+SPLIT[profile]
 Any-username-taken
 1
 False
-False
-False
-False
-[True, True, False, False]
-853
-[Health]
-|
-FartSquad
-2
-2-8
-1580
-150
-Health-Health-Fire rate-Burn
+
+SPLIT[profile]

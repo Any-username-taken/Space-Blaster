@@ -18,7 +18,7 @@ class Player(pygame.sprite.Sprite):
         self.anim_speed = 0.5
 
         self.pos = pygame.math.Vector2(pos[0], pos[1])
-        self.velX = 0
+        self.velX = 13
         self.velY = 0
         self.angle = 0
 
@@ -46,6 +46,11 @@ class Player(pygame.sprite.Sprite):
         self.health = health
         self.maxHealth = maxHealth
 
+        self.i_frames = 0
+
+        self.enter = True
+        self.loop = 80
+
     def refresh(self):
         self.user_input()
         self.rotation()
@@ -71,11 +76,18 @@ class Player(pygame.sprite.Sprite):
             self.rect = self.imOutline.copy()
 
     def movement(self):
-        if self.controllable:
-            self.pos += pygame.math.Vector2(self.velX, self.velY)
-            self.hitBox.center = self.pos
-            self.imOutline.center = self.hitBox.center
-            self.rect = self.imOutline.copy()
+        if self.enter and self.loop > 0:
+            self.velX -= 0.1
+            self.loop -= 1
+        elif self.enter:
+            self.enter = False
+            self.controllable = True
+            self.velX = 0
+
+        self.pos += pygame.math.Vector2(self.velX, self.velY)
+        self.hitBox.center = self.pos
+        self.imOutline.center = self.hitBox.center
+        self.rect = self.imOutline.copy()
 
         # Screen wrap top - bottom
 
@@ -110,14 +122,15 @@ class Player(pygame.sprite.Sprite):
             self.velY += 0.125
 
     def change_vel(self):
-        if self.keys[0] and self.velY > -self.mSpeed:
-            self.velY -= 0.5
-        if self.keys[1] and self.velX > -self.mSpeed:
-            self.velX -= 0.5
-        if self.keys[2] and self.velY < self.mSpeed:
-            self.velY += 0.5
-        if self.keys[3] and self.velX < self.mSpeed:
-            self.velX += 0.5
+        if self.controllable:
+            if self.keys[0] and self.velY > -self.mSpeed:
+                self.velY -= 0.5
+            if self.keys[1] and self.velX > -self.mSpeed:
+                self.velX -= 0.5
+            if self.keys[2] and self.velY < self.mSpeed:
+                self.velY += 0.5
+            if self.keys[3] and self.velX < self.mSpeed:
+                self.velX += 0.5
 
     def user_input(self):
         keys = pygame.key.get_pressed()
@@ -172,6 +185,9 @@ class Player(pygame.sprite.Sprite):
         if self.type == 1 and not self.mouse[1] and self.fireRate < 5:
             self.fireRate += 0.1
 
+        if self.i_frames > 0:
+            self.i_frames -= 0.1
+
     def update_animation(self):
         if self.anim_speed > 0:
             self.anim_speed -= 0.1
@@ -181,7 +197,8 @@ class Player(pygame.sprite.Sprite):
             self.current_image = pygame.transform.rotate(self.holder_image, -self.angle)
 
     def take_damage(self, receiving):
-        self.health -= receiving
+        if self.i_frames <= 0:
+            self.health -= receiving
 
 
 class Enemy(pygame.sprite.Sprite):
@@ -229,6 +246,9 @@ class Enemy(pygame.sprite.Sprite):
 
         self.player_pos = [[0, 0], [0, 0]]
 
+        if self.type == "1":
+            self.velX -= 8
+
     def refresh(self):
         self.move()
         self.rotate()
@@ -255,7 +275,57 @@ class Enemy(pygame.sprite.Sprite):
         self.imOutline.center = self.hitBox.center
         self.rect = self.imOutline.copy()
         if self.type == "1":
-            pass
+            if not self.enter and self.velX < 0:
+                self.velX += 0.1
+            elif self.loop == 0 and not self.enter:
+                self.enter = 1
+                self.velX = 0
+                self.loop = 80
+            elif self.enter == 1 and self.loop > 0:
+                self.loop -= 1
+            elif self.enter == 1:
+                self.enter = 2
+                self.loop = 60
+            elif self.enter == 2 and self.loop > 0:
+                self.velX -= 0.1
+                self.loop -= 1
+            elif self.enter == 2:
+                self.loop = 80
+                self.enter = 3
+            elif self.enter == 3 and self.loop > 0:
+                self.loop -= 1
+            elif self.enter == 3:
+                self.enter = 4
+                self.loop = 60
+            elif self.enter == 4 and self.loop > 0:
+                self.velX += 0.1
+                self.loop -= 1
+            elif self.enter == 4:
+                self.enter = 5
+                self.velX = 0
+                self.loop = 160
+            elif self.enter == 5 and self.loop > 0:
+                self.loop -= 1
+            elif self.enter == 5:
+                self.enter = 6
+                self.loop = 60
+            elif self.enter == 6 and self.loop > 0:
+                self.velX += 0.1
+                self.loop -= 1
+            elif self.enter == 6:
+                self.enter = 7
+                self.loop = 80
+            elif self.enter == 7 and self.loop > 0:
+                self.loop -= 1
+            elif self.enter == 7:
+                self.enter = 8
+                self.loop = 60
+            elif self.enter == 8 and self.loop > 0:
+                self.velX -= 0.1
+                self.loop -= 1
+            elif self.enter == 8:
+                self.enter = 1
+                self.loop = 160
 
         if self.type == "2":
             self.rotation = False
@@ -384,3 +454,16 @@ class HealthBar:
 
     def update(self):
         self.show_bar()
+
+
+class Deaths:
+    def __init__(self, type_, image, pos):
+        self.type = type_
+        self.image = pygame.transform.rotozoom(pygame.image.load("Sprites/Extras/Deaths/EXPLOSION small.svg"), 0, 1)
+        self.width = self.image.get_width()
+        self.height = self.image.get_height()
+        self.pos = pygame.math.Vector2(pos[0] - self.width / 4, pos[1] - self.height / 2)
+        self.opacity = 400
+
+    def refresh(self):
+        self.opacity -= 25

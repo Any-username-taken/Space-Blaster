@@ -4,11 +4,17 @@ HEIGHT = 720
 FPS = 60
 delta_time = 0.1
 # I will try to add delta time, but doubt this will happen
-hitBoxes = True
-
+hitBoxes = False
 
 c_w = WIDTH
 c_h = HEIGHT
 
+# Player test
 player_pos = [0, 0]
 player_health = 0
+
+# Game Variables
+level_start = True
+level_complete = False
+star_system = 0
+game_pause = False
