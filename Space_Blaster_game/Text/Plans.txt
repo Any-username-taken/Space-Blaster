@@ -20,3 +20,6 @@ Add title screen and main menu buttons: False
 Add level select: False
 Create First Boss: False
 Add multiple profiles or saves to log into: False
+Add mines: False
+Add mine layer enemy: False
+Add ability to change between ships: False
