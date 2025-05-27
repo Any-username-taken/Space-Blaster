@@ -310,11 +310,11 @@ def update_pickups(screen):
 
     global i_frames
 
-    if i_frames <= 0:
+    if i_frames <= 0 and keys[pygame.K_x]:
         x1 = random.randint(0, 1280)
         y1 = random.randint(0, 720)
         for i in range(random.randint(10, 10)):
-            create_pickup("xp", [x1, y1], random.randint(0, 360), 20, "Sprites/Extras/Effects/xp.svg", 0,
+            create_pickup("xp", [x1, y1], random.randint(0, 360), 10, "Sprites/Extras/Effects/xp.svg", 10,
                         random.randint(3, 30))
         i_frames += 5
     elif i_frames > 0:
@@ -581,7 +581,7 @@ def open_levels(world):
 # -- Test Area --
 create_player()
 
-world = open_levels("S2")
+world = open_levels("S1")
 
 stars = pygame.transform.rotozoom(pygame.image.load("Sprites/Extras/Backgrounds/Star Preset1.svg"), 0, 2.7)
 

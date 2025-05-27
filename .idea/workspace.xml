@@ -5,18 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="146e4e39-37df-4227-bfe3-6990b5a24538" name="Changes" comment="Just some new updates">
-      <change afterPath="$PROJECT_DIR$/Space_Blaster_game/Sprites/Extras/Effects/xp.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Space_Blaster_game/Sprites/Player/Ship 4/RailGun.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Space_Blaster_game/Sprites/Player/Ship 4/RailGun2.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Space_Blaster_game/Sprites/Projectiles/MineEnemy.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Classes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Important_Variables.py" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Important_Variables.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Sprites/Player/basic ship.svg" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Sprites/Player/Ship 1/basic ship.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Sprites/Player/basic ship2.svg" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Sprites/Player/Ship 1/basic ship2.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Start.py" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Start.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Text/Important_text/Too_lazy_to_make_efficient_level_thing_so_Im_making_this.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Text/Important_text/Too_lazy_to_make_efficient_level_thing_so_Im_making_this.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Text/Important_text/levels.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Text/Important_text/levels.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -192,7 +184,23 @@
       <option name="project" value="LOCAL" />
       <updated>1747720454650</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Just some new updates">
+      <option name="closed" value="true" />
+      <created>1748370496150</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1748370496150</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Just some new updates">
+      <option name="closed" value="true" />
+      <created>1748370542047</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1748370542047</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

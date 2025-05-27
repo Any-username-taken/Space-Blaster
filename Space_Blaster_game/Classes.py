@@ -493,7 +493,7 @@ class Deaths:
 
 class PickUp:
     def __init__(self, angle, speed, position, type_, image, lifetime, value):
-        self.pick_up_range = 900
+        self.pick_up_range = 100
 
         if 0.3 + (value/10) < 1:
             self.scale = 0.3 + (value/10)
