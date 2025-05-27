@@ -5,17 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="146e4e39-37df-4227-bfe3-6990b5a24538" name="Changes" comment="Just some new updates">
-      <change afterPath="$PROJECT_DIR$/Space_Blaster_game/Sprites/Extras/Backgrounds/Star Preset1.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Space_Blaster_game/Sprites/Extras/Deaths/EXPLOSION small.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Space_Blaster_game/Text/Important_text/Too_lazy_to_make_efficient_level_thing_so_Im_making_this.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Space_Blaster_game/Sprites/Extras/Effects/xp.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Space_Blaster_game/Sprites/Player/Ship 4/RailGun.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Space_Blaster_game/Sprites/Player/Ship 4/RailGun2.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Space_Blaster_game/Sprites/Projectiles/MineEnemy.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Classes.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Important_Variables.py" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Important_Variables.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Sprites/Player/basic ship.svg" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Sprites/Player/Ship 1/basic ship.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Sprites/Player/basic ship2.svg" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Sprites/Player/Ship 1/basic ship2.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Start.py" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Start.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Text/Important_text/Too_lazy_to_make_efficient_level_thing_so_Im_making_this.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Text/Important_text/Too_lazy_to_make_efficient_level_thing_so_Im_making_this.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Text/Important_text/levels.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Text/Important_text/levels.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Text/Important_text/saves.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Text/Important_text/saves.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Space_Blaster_game/Text/Important_text/saves_info.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/Text/Important_text/saves_info.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Space_Blaster_game/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/Space_Blaster_game/test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,11 +48,11 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites\Player\Ship 4" />
+      <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites\Player\Ship 1" />
+      <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites\Projectiles" />
+      <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites\Extras\Effects" />
       <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites\Extras\Backgrounds" />
-      <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites\Extras" />
-      <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites\Extras\Deaths" />
-      <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites\Enemies\Enemy2" />
-      <recent name="C:\Users\deetr\PycharmProjects\Space_Blaster\Space_Blaster_game\Sprites\Backgrounds" />
     </key>
   </component>
   <component name="RunManager">
@@ -183,7 +184,15 @@
       <option name="project" value="LOCAL" />
       <updated>1747683929481</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Just some new updates">
+      <option name="closed" value="true" />
+      <created>1747720454650</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1747720454650</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

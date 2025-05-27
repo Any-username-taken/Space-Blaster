@@ -32,11 +32,21 @@ Split star systems by bar line, Splits waves/levels by \n, Splits custom enemy p
 
 |
 S1
-1/2/0/0/C/False
-2/1/0/0/S/False
-1/1/-5/10/C/False
-1/2/-5/55/C/False
-2/1/0/14/C/False
-2/2/0/0/S/False
+1/2/0/0/C
+2/1/0/0/S
+1/1/-5/10/C
+1/2/-5/55/C
+2/1/0/14/C
+2/2/0/0/S
 |
 S2
+1/1/0/3/C
+1/2/0/3/C
+1/1/0/3/C
+1/2/0/3/C
+2/1/0/3/C
+2/2/0/3/C
+1/1/0/3/C
+2/2/0/3/S
+|
+S3

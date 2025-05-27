@@ -1,3 +1,5 @@
+import math
+
 import pygame
 import random
 from Space_Blaster_game.Classes import *
@@ -17,21 +19,30 @@ pygame.display.set_caption("Space Blaster")
 winWidget = pygame.image.load("OtherImg/window widget.svg")
 pygame.display.set_icon(winWidget)
 
+font = pygame.font.SysFont(None, 30)
+
 spawn = []
 
-# -- Less Important Setup --
-background = pygame.transform.scale(pygame.image.load("Sprites/Backgrounds/bground1.svg"), (100, 100))
+world = False
 
+# -- Less Important Setup --
 plist = []
 phealth = []
 projectiles = []
 healthBars = []
 enemies = []
+pick_ups = []
 deaths = []
 
+buttons = {"p": (False, False), "h": (False, False)}
 current_username = False
 
 i_frames = 0
+
+
+def draw_text(text, screen, x=0, y=0, text_color=(250, 250, 250), size=50):
+    txt = font.render(text, True, text_color)
+    screen.blit(txt, (x, y))
 
 # --- Class Creation ---
 
@@ -42,25 +53,69 @@ def check_collision(danger, target):
 
 
 def check_collide():
-    # Remember to come back to add mine explosions, target list is deaths[]
+    count = 0
+    for expl in deaths:
+        if expl.type == "p":
+            for i in enemies:
+                temp = pygame.sprite.collide_rect(i, expl)
+                if temp and not expl.dealt:
+                    i.take_damage(expl.damage)
+                    expl.dealt = True
+        elif expl.type == "e":
+            for i in plist:
+                temp = pygame.sprite.collide_rect(i, expl)
+                if temp and not expl.dealt:
+                    i.take_damage(expl.damage)
+                    expl.dealt = True
+        count += 1
 
     count = 0
-    for bull in projectiles:
-        if bull.opacity >= 100:
-            if bull.type == "player":
-                for i in enemies:
-                    temp = pygame.sprite.collide_rect(i, bull)
-                    if temp:
-                        i.take_damage(bull.damage)
-                        projectiles.pop(count)
-            else:
-                for pl in plist:
-                    temp = pygame.sprite.collide_rect(pl, bull)
-                    if temp:
-                        pl.take_damage(bull.damage)
-                        projectiles.pop(count)
+    try:
+        for bull in projectiles:
+            if bull.opacity >= 100:
+                if bull.type == "player":
+                    for i in enemies:
+                        temp = pygame.sprite.collide_rect(i, bull)
+                        if temp:
+                            i.take_damage(bull.damage)
+                            projectiles.pop(count)
+                else:
+                    for pl in plist:
+                        temp = pygame.sprite.collide_rect(pl, bull)
+                        if temp:
+                            pl.take_damage(bull.damage)
+                            projectiles.pop(count)
 
-        count += 1
+            count += 1
+    except IndexError:
+        pass
+
+    count = 0
+
+    try:
+        for pick in pick_ups:
+            if pick.opacity >= 3:
+                for i in plist:
+                    if check_dist(i.pos, pick.pos) <= 5:
+                        if pick.type == "xp":
+                            i.add_xp(pick.value)
+                            pick_ups.pop(count)
+                    else:
+                        pick.distance = check_dist(i.pos, pick.pos)
+            else:
+                pick_ups.pop(count)
+
+            count += 1
+
+    except IndexError:
+        pass
+
+
+def check_dist(pos1, pos2):
+    x1, y1 = pos1
+    x2, y2 = pos2
+
+    return math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
 
 
 def update_health(pos, health, index, offset):
@@ -78,6 +133,8 @@ def player_update_health(pos, health, index, offset):
 def update_player(screen):
     count = 0
     for p in plist:
+        draw_text(f"Level: {p.level} XP: {p.xp}", screen)
+
         p.screen_par = [c_w, c_h]
         check = p.refresh()
 
@@ -149,6 +206,8 @@ def update_enemies(screen):
             if check[5] == "enemy":
                 create_projectile([check[4], "enemy"], check[1], check[0], enemy.imOutline.center,
                                   enemy.angle + random.randint(-50, 50) / 10, check[2])
+            elif check[5] == "emine":
+                create_projectile([check[4], "emine"], check[1], check[0], enemy.imOutline.center, enemy.angle, check[2])
 
         count += 1
 
@@ -157,7 +216,7 @@ def update_enemies(screen):
 
         global i_frames
 
-        if keys[pygame.K_p] and i_frames <= 0:
+        if keys[pygame.K_e] and i_frames <= 0:
             enemy.take_damage(5)
             i_frames += 1
         elif i_frames > 0:
@@ -169,6 +228,8 @@ def update_enemies(screen):
         try:
             if enemy.health <= 0:
                 create_death(enemy.pos, "s")
+                for i in range(random.randint(3, 5)):
+                    create_pickup("xp", enemy.pos, random.randint(1, 360), 5, "Sprites/Extras/Effects/xp.svg", 100, enemy.xp)
                 healthBars.pop(count)
                 enemies.pop(count)
             count += 1
@@ -180,6 +241,9 @@ def update_projectile(screen):
     count = 0
     for pew in projectiles:
         pew.refresh()
+
+        if pew.type == "emine" or pew.type == "pmine":
+            pew.player_pos[0] = player_pos
 
         pew.image.set_alpha(pew.opacity)
         screen.blit(pew.image, pew.pos)
@@ -212,12 +276,6 @@ def update_deaths(screen):
         boom.image.set_alpha(boom.opacity)
         screen.blit(boom.image, boom.pos)
 
-        if hitBoxes:
-            if boom.type == "p":
-                pygame.draw.rect(screen, "green", boom.hurtBox, width=2)
-            else:
-                pygame.draw.rect(screen, "red", boom.hurtBox, width=2)
-
         count += 1
 
     count = 0
@@ -227,6 +285,47 @@ def update_deaths(screen):
             if boom.opacity <= 0:
                 deaths.pop(count)
 
+            count += 1
+        except IndexError:
+            pass
+
+
+def update_pickups(screen):
+    count = 0
+
+    for pick in pick_ups:
+        pick.refresh()
+
+        pick.set_player_position(player_pos)
+
+        pick.image.set_alpha(pick.opacity)
+        screen.blit(pick.image, pick.rect)
+
+        if hitBoxes:
+            pygame.draw.circle(screen, "green", pick.rect.center, radius=pick.pick_up_range, width=2)
+
+        count += 1
+
+    keys = pygame.key.get_pressed()
+
+    global i_frames
+
+    if i_frames <= 0:
+        x1 = random.randint(0, 1280)
+        y1 = random.randint(0, 720)
+        for i in range(random.randint(10, 10)):
+            create_pickup("xp", [x1, y1], random.randint(0, 360), 20, "Sprites/Extras/Effects/xp.svg", 0,
+                        random.randint(3, 30))
+        i_frames += 5
+    elif i_frames > 0:
+        i_frames -= 0.1
+
+    count = 0
+
+    for pick in pick_ups:
+        try:
+            if pick.opacity <= 0:
+                pick_ups.pop(count)
             count += 1
         except IndexError:
             pass
@@ -242,15 +341,22 @@ def create_healthBar(type_, health, maxHealth, screen, pos):
         healthBars.append(bar)
 
 
-def create_player():
-    player = Player("Sprites/Player/basic ship.svg", ["Sprites/Player/basic ship2.svg"], [-100, 360], 1, 4.5, 2, 5, 15, 10,
-                    False, [WIDTH, HEIGHT])
-    create_healthBar("p", player.health, player.maxHealth, screen, player.pos)
-    plist.append(player)
+def create_player(type_=1):
+    if type_ == 1:
+        player = Player("Sprites/Player/Ship 1/basic ship.svg", ["Sprites/Player/Ship 1/basic ship2.svg"], [-100, 360], 1, 4.5, 2, 5, 15, 10,
+                        False, [WIDTH, HEIGHT])
+        create_healthBar("p", player.health, player.maxHealth, screen, player.pos)
+        plist.append(player)
+    elif type_ == 2:
+        player = Player("Sprites/Player/Ship 4/RailGun.svg", ["Sprites/Player/Ship 4/RailGun2.svg"], [-100, 360], 1, 20, 2, 5,
+                        15, 10,
+                        False, [WIDTH, HEIGHT])
+        create_healthBar("p", player.health, player.maxHealth, screen, player.pos)
+        plist.append(player)
 
 
-def create_enemy(img, anim_paths, start_pos, type_, speed, fireRate, damage, bull_speed, scale, starting_angle=180, health=50, max_health=50):
-    enemy = Enemy(img, anim_paths, start_pos, type_, speed, fireRate, damage, 15, bull_speed, True, [WIDTH, HEIGHT], scale, health, max_health, starting_angle)
+def create_enemy(img, anim_paths, start_pos, type_, speed, fireRate, damage, bull_speed, scale, starting_angle=180, health=50, max_health=50, xp=3):
+    enemy = Enemy(img, anim_paths, start_pos, type_, speed, fireRate, damage, 15, bull_speed, True, [WIDTH, HEIGHT], scale, health, max_health, starting_angle, xp)
     enemies.append(enemy)
     create_healthBar("e", enemy.health, enemy.maxHealth, screen, enemy.pos)
 
@@ -272,19 +378,30 @@ def create_death(pos, type_):
         deaths.append(death)
 
 
+def create_pickup(type_, pos, angle, speed, source, lifetime, value):
+    pickup = PickUp(angle, speed, pos, type_, source, lifetime, value)
+    pick_ups.append(pickup)
+
+
 # --- Enemy Spawner ---
 def spawn_queue():
     if len(spawn):
         if spawn[0][1] > 0:
             spawn[0][1] -= 0.1
         else:
-            create_enemy(spawn[0][0][0], spawn[0][0][1], spawn[0][0][2], spawn[0][0][3], spawn[0][0][4], spawn[0][0][5], spawn[0][0][6], spawn[0][0][7], spawn[0][0][8], spawn[0][0][9], spawn[0][0][10], spawn[0][0][11])
-            spawn.pop(0)
+            try:
+                create_enemy(spawn[0][0][0], spawn[0][0][1], spawn[0][0][2], spawn[0][0][3], spawn[0][0][4], spawn[0][0][5], spawn[0][0][6], spawn[0][0][7], spawn[0][0][8], spawn[0][0][9], spawn[0][0][10], spawn[0][0][11], spawn[0][0][12])
+                spawn.pop(0)
+            except IndexError:
+                create_enemy(spawn[0][0][0], spawn[0][0][1], spawn[0][0][2], spawn[0][0][3], spawn[0][0][4],
+                             spawn[0][0][5], spawn[0][0][6], spawn[0][0][7], spawn[0][0][8], spawn[0][0][9],
+                             spawn[0][0][10], spawn[0][0][11])
+                spawn.pop(0)
 
 
 def enemy_presets(type_, formation):
     # 1st Image, [collection of images here], [posX, posY], type, speed, fire rate, damage, bullet speed, scale, angle,
-    # health, max health
+    # health, max health, xp (optional)
     if type_ == "1":
         if formation == "1":
             spawn.append([["Sprites/Enemies/Enemy1/common.svg", ["Sprites/Enemies/Enemy1/common2.svg"], [1380, 360], "1", 3, 30, 1, 5, 0.5, 180, 50, 50], 0])
@@ -318,16 +435,16 @@ def enemy_presets(type_, formation):
             print("ERROR! Formation not found!")
     elif type_ == "2":
         if formation == "1":
-            spawn.append([["Sprites/Enemies/Enemy2/basic.svg", ["Sprites/Enemies/Enemy2/basic2.svg"], [1380, 360], "2", 2, 10, 2, 5, 0.7, 180, 150, 150], 0])
+            spawn.append([["Sprites/Enemies/Enemy2/basic.svg", ["Sprites/Enemies/Enemy2/basic2.svg"], [1380, 360], "2", 2, 10, 2, 5, 0.7, 180, 150, 150, 5], 0])
             spawn.append([["Sprites/Enemies/Enemy2/basic.svg", ["Sprites/Enemies/Enemy2/basic2.svg"], [1380, 460], "2",
-                           2, 10, 2, 5, 0.7, 180, 150, 150], 5])
+                           2, 10, 2, 5, 0.7, 180, 150, 150, 5], 5])
             spawn.append([["Sprites/Enemies/Enemy2/basic.svg", ["Sprites/Enemies/Enemy2/basic2.svg"], [1380, 260], "2",
-                           2, 10, 2, 5, 0.7, 180, 150, 150], 0])
+                           2, 10, 2, 5, 0.7, 180, 150, 150, 5], 0])
         elif formation == "2":
             spawn.append([["Sprites/Enemies/Enemy2/basic.svg", ["Sprites/Enemies/Enemy2/basic2.svg"], [1380, 70], "2",
-                           2, 10, 2, 5, 0.7, 180, 150, 150], 0])
+                           2, 10, 2, 5, 0.7, 180, 150, 150, 5], 0])
             spawn.append([["Sprites/Enemies/Enemy2/basic.svg", ["Sprites/Enemies/Enemy2/basic2.svg"], [1380, 650], "2",
-                           2, 10, 2, 5, 0.7, 180, 150, 150], 0])
+                           2, 10, 2, 5, 0.7, 180, 150, 150, 5], 0])
         else:
             print("ERROR! Formation not found!")
     else:
@@ -348,8 +465,8 @@ def level_reader(world):
         complete = int(complete)
         time_until = float(time_until)
 
-    print("\b" * 9999, end="", flush=True)
-    print(f"Wave: {wave} Timer: {timer} Minimum Enemy: {min_e} Wave Completed: {complete} Time Until: {time_until}", end="")
+    # print("\b" * 9999, end="", flush=True)
+    # print(f"Wave: {wave} Timer: {timer} Minimum Enemy: {min_e} Wave Completed: {complete} Time Until: {time_until}", end="")
 
     try:
         if world[wave] == "pass":
@@ -439,8 +556,8 @@ def open_levels(world):
     var = False
     for i in lines:
         if world == i.split("\n")[1]:
-
             var = i
+            break
 
     if len(var.split("\n")) > 4:
         # Trust me when I say that this part is totally necessary
@@ -464,7 +581,7 @@ def open_levels(world):
 # -- Test Area --
 create_player()
 
-world = open_levels("S1")
+world = open_levels("S2")
 
 stars = pygame.transform.rotozoom(pygame.image.load("Sprites/Extras/Backgrounds/Star Preset1.svg"), 0, 2.7)
 
@@ -488,17 +605,23 @@ while running:
 
     # Update screen
     if not game_pause and level_start:
-        screen.fill((0, 0, 10))
+        if not party_mode:
+            screen.fill((0, 0, 10))
 
-        screen.blit(stars, [0, -100])
+        # screen.blit(stars, [0, -100])
 
-        level_reader(world)
+        # pygame.draw.circle(screen, "green", [50, 50], radius=50, width=2)
+
+        if world:
+            level_reader(world)
 
         spawn_queue()
 
         update_projectile(screen)
 
         check_collide()
+
+        update_pickups(screen)
 
         update_player(screen)
         update_enemies(screen)

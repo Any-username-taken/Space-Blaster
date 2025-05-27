@@ -6,6 +6,8 @@ delta_time = 0.1
 # I will try to add delta time, but doubt this will happen
 hitBoxes = False
 
+party_mode = False
+
 c_w = WIDTH
 c_h = HEIGHT
 

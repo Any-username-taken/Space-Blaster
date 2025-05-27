@@ -5,7 +5,7 @@ import math
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, img_src, anim_srcs, pos, type_, mSpeed, fireRate, damage, bull_lifetime, bull_speed, controllable, screen_par, scale=0.4, health=20, maxHealth=20):
+    def __init__(self, img_src, anim_srcs, pos, type_, mSpeed, fireRate, damage, bull_lifetime, bull_speed, controllable, screen_par, scale=0.4, health=20, maxHealth=20, hit_box_scale=[20, 20]):
         super().__init__()
 
         self.scale = scale
@@ -23,7 +23,7 @@ class Player(pygame.sprite.Sprite):
         self.angle = 0
 
         self.hitBox = self.image.get_rect(center=self.pos)
-        self.imOutline = self.hitBox.copy()
+        self.imOutline = self.image.get_rect(center=self.pos)
         self.rect = self.hitBox.copy()
 
         self.type = type_
@@ -51,6 +51,24 @@ class Player(pygame.sprite.Sprite):
         self.enter = True
         self.loop = 80
 
+        self.level = 0
+        self.max_lvl = 50
+        self.xp = 0
+
+    def add_xp(self, amount):
+        if self.xp + amount > self.max_lvl:
+            hold = (self.xp + amount) - self.max_lvl
+            self.xp = 0
+            self.level += 1
+            self.max_lvl += 50
+            self.add_xp(hold)
+        elif self.xp + amount == self.max_lvl:
+            self.xp = 0
+            self.level += 1
+            self.max_lvl += 50
+        else:
+            self.xp += amount
+
     def refresh(self):
         self.user_input()
         self.rotation()
@@ -72,8 +90,7 @@ class Player(pygame.sprite.Sprite):
 
             self.angle = math.degrees(math.atan2(self.mouse[2][1], self.mouse[2][0]))
             self.current_image = pygame.transform.rotate(self.holder_image, -self.angle)
-            self.imOutline = self.current_image.get_rect(center=self.hitBox.center)
-            self.rect = self.imOutline.copy()
+            self.imOutline = self.current_image.get_rect(center=self.pos)
 
     def movement(self):
         if self.enter and self.loop > 0:
@@ -85,9 +102,9 @@ class Player(pygame.sprite.Sprite):
             self.velX = 0
 
         self.pos += pygame.math.Vector2(self.velX, self.velY)
-        self.hitBox.center = self.pos
+        self.hitBox = self.image.get_rect(center=self.pos)
         self.imOutline.center = self.hitBox.center
-        self.rect = self.imOutline.copy()
+        self.rect = self.hitBox.copy()
 
         # Screen wrap top - bottom
 
@@ -202,7 +219,7 @@ class Player(pygame.sprite.Sprite):
 
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, img_src, anim_srcs, pos, type_, mSpeed, fireRate, damage, bull_lifetime, bull_speed, controllable, screen_par, scale=0.4, health=20, maxHealth=20, angle=180):
+    def __init__(self, img_src, anim_srcs, pos, type_, mSpeed, fireRate, damage, bull_lifetime, bull_speed, controllable, screen_par, scale=0.4, health=20, maxHealth=20, angle=180, xp=3):
         super().__init__()
         self.scale = scale
 
@@ -245,6 +262,8 @@ class Enemy(pygame.sprite.Sprite):
         self.loop = 0
 
         self.player_pos = [[0, 0], [0, 0]]
+
+        self.xp = xp
 
         if self.type == "1":
             self.velX -= 8
@@ -457,13 +476,116 @@ class HealthBar:
 
 
 class Deaths:
-    def __init__(self, type_, image, pos):
+    def __init__(self, type_, image, pos, damage=0):
         self.type = type_
-        self.image = pygame.transform.rotozoom(pygame.image.load("Sprites/Extras/Deaths/EXPLOSION small.svg"), 0, 1)
+        self.image = pygame.transform.rotozoom(pygame.image.load(image), 0, 1)
         self.width = self.image.get_width()
         self.height = self.image.get_height()
         self.pos = pygame.math.Vector2(pos[0] - self.width / 4, pos[1] - self.height / 2)
+        self.rect = self.image.get_rect(center=self.pos)
         self.opacity = 400
+        self.damage = damage
+        self.dealt = False
 
     def refresh(self):
         self.opacity -= 25
+
+
+class PickUp:
+    def __init__(self, angle, speed, position, type_, image, lifetime, value):
+        self.pick_up_range = 900
+
+        if 0.3 + (value/10) < 1:
+            self.scale = 0.3 + (value/10)
+        else:
+            self.scale = 1
+
+        self.enter = speed
+
+        self.image = pygame.transform.rotozoom(pygame.image.load(image), angle, self.scale)
+        self.holder_image = self.image.copy()
+
+        self.pos = pygame.math.Vector2(position[0], position[1])
+
+        self.rect = self.image.get_rect(center=self.pos)
+        self.hitBox = self.rect.copy()
+
+        self.angle = angle
+
+        self.player_pos = [[0, 0], [0, 0]]
+
+        self.type = type_
+
+        self.speed = speed
+
+        self.lifetime = lifetime
+
+        self.opacity = 300
+
+        self.value = value
+
+        self.distance = 100
+
+        self.take = 0
+
+    def refresh(self):
+        self.rotate()
+        self.move()
+        self.take_life()
+
+    def rotate(self):
+        if self.enter > 0:
+            self.image = pygame.transform.rotozoom(self.holder_image, -self.angle, self.scale)
+            self.enter -= 0.1
+            self.speed -= 0.1
+            if self.enter <= 0:
+                self.speed = 0
+        elif self.distance < self.pick_up_range:
+            self.player_pos[1][0] = (self.player_pos[0][0] - self.hitBox.centerx)
+            self.player_pos[1][1] = (self.player_pos[0][1] - self.hitBox.centery)
+
+            self.angle = math.degrees(math.atan2(self.player_pos[1][1], self.player_pos[1][0]))
+            self.image = pygame.transform.rotozoom(self.holder_image, -self.angle, self.scale)
+            self.hitBox.center = self.pos
+            self.rect = self.image.get_rect(center=self.hitBox.center)
+
+    def move(self):
+        if self.distance < self.pick_up_range and self.enter <= 0:
+            if self.speed < 20:
+                self.speed += 0.2
+        self.pos[0] = self.pos[0] + (self.speed * math.cos(math.radians(self.angle)))
+        self.pos[1] = self.pos[1] + (self.speed * math.sin(math.radians(self.angle)))
+        self.rect.center = self.pos
+        self.hitBox = self.rect.copy()
+
+        # Screen wrap top - bottom
+
+        if self.pos[1] > 720:
+            self.pos[1] = 0
+
+        if self.pos[1] < -1:
+            self.pos[1] = 720
+
+        # Screen wrap left - right
+
+        if self.pos[0] > 1280:
+            self.pos[0] = 0
+
+        if self.pos[0] < -1:
+            self.pos[0] = 1280
+
+    def take_life(self):
+        if self.speed > 0 >= self.enter:
+            self.speed -= 0.05
+
+        if self.lifetime > 0 >= self.enter:
+            self.lifetime -= 0.1
+        elif self.lifetime <= 0:
+            self.opacity -= 10
+            self.scale += 0.1
+            self.image = pygame.transform.rotozoom(self.holder_image, -self.angle, self.scale)
+            self.hitBox.center = self.pos
+            self.rect = self.image.get_rect(center=self.hitBox.center)
+
+    def set_player_position(self, position):
+        self.player_pos[0] = position
