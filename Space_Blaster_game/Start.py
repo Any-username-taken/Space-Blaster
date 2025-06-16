@@ -33,8 +33,9 @@ healthBars = []
 enemies = []
 pick_ups = []
 deaths = []
+menu_buttons = []
 
-buttons = {"p": (False, False), "h": (False, False)}
+buttons = {"p": [False, False], "h": [False, False]}
 current_username = False
 
 i_frames = 0
@@ -57,15 +58,17 @@ def check_collide():
     for expl in deaths:
         if expl.type == "p":
             for i in enemies:
-                temp = pygame.sprite.collide_rect(i, expl)
-                if temp and not expl.dealt:
-                    i.take_damage(expl.damage)
-                    expl.dealt = True
+                temp = check_dist(expl.pos, i.pos)
+                if temp <= expl.image.get_width()/2:
+                    try:
+                        i.take_damage((expl.damage / int(temp/2) + 2), 0.1)
+                    except ZeroDivisionError:
+                        i.take_damage(expl.damage, 0.1)
         elif expl.type == "e":
             for i in plist:
                 temp = pygame.sprite.collide_rect(i, expl)
                 if temp and not expl.dealt:
-                    i.take_damage(expl.damage)
+                    i.take_damage(expl.damage, 5)
                     expl.dealt = True
         count += 1
 
@@ -78,6 +81,13 @@ def check_collide():
                         temp = pygame.sprite.collide_rect(i, bull)
                         if temp:
                             i.take_damage(bull.damage)
+                            projectiles.pop(count)
+                elif bull.type == "pxplode":
+                    for i in enemies:
+                        temp = pygame.sprite.collide_rect(i, bull)
+                        if temp:
+                            i.take_damage(bull.damage)
+                            create_death(bull.pos, "p", bull.damage)
                             projectiles.pop(count)
                 else:
                     for pl in plist:
@@ -133,42 +143,58 @@ def player_update_health(pos, health, index, offset):
 def update_player(screen):
     count = 0
     for p in plist:
-        draw_text(f"Level: {p.level} XP: {p.xp}", screen)
+        if count == target_player:
+            if p.charge > 0:
+                draw_text(f"Level: {p.level} XP: {p.xp} Charge: {int(p.charge)}%", screen)
+            else:
+                draw_text(f"Level: {p.level} XP: {p.xp}", screen)
 
         p.screen_par = [c_w, c_h]
         check = p.refresh()
 
-        global player_pos
-        player_pos = p.pos
+        if count == target_player:
+            global player_pos
+            player_pos = p.pos
 
-        global player_health
-        player_health = p.health
+            global player_health
+            player_health = p.health
+
+        # brighten = 0
+        p.current_image.fill((p.brightness, p.brightness, p.brightness), special_flags=pygame.BLEND_RGB_ADD)
 
         screen.blit(p.current_image, p.imOutline)
 
         player_update_health(p.pos, p.health, count, p.image.get_height() + 10)
 
         if hitBoxes:
-            pygame.draw.rect(screen, "red", p.hitBox, width=2)
-            pygame.draw.rect(screen, "green", p.imOutline, width=2)
+            pygame.draw.rect(screen, "red", p.rect, width=2)
+            if count == target_player:
+                pygame.draw.rect(screen, "blue", p.imOutline, width=2)
+            else:
+                pygame.draw.rect(screen, "green", p.imOutline, width=2)
 
         if check:
             if check[5] == "player":
-                create_projectile([check[4], "player"], check[1], check[0], p.imOutline.center,
-                                  p.angle + random.randint(-100, 100) / 10, check[2])
+                create_projectile([check[4], "player"], check[1], check[0], p.pos,
+                                  p.angle + random.randint(-p.accuracy, p.accuracy) / 10, check[2])  # angle used to be 100
+            elif check[5] == "pxpl":
+                create_projectile([check[4], "pxplode"], check[1], check[0], p.pos, p.angle + random.randint(-p.accuracy, p.accuracy) / 10, check[2])
 
+            elif check[5] == "plazer":
+                create_projectile([check[4], "plazer"], check[1], check[0], p.pos, p.angle, check[2])
         count += 1
 
         # this is just to test out damage
-        keys = pygame.key.get_pressed()
+        if dev_tools:
+            keys = pygame.key.get_pressed()
 
-        global i_frames
+            global i_frames
 
-        if keys[pygame.K_r] and i_frames <= 0:
-            p.take_damage(3)
-            i_frames += 1
-        elif i_frames > 0:
-            i_frames -= 0.1
+            if keys[pygame.K_r] and i_frames <= 0:
+                p.take_damage(3)
+                i_frames += 1
+            elif i_frames > 0:
+                i_frames -= 0.1
 
     count = 0
 
@@ -212,15 +238,16 @@ def update_enemies(screen):
         count += 1
 
         # this is just to test out damage
-        keys = pygame.key.get_pressed()
+        if dev_tools:
+            keys = pygame.key.get_pressed()
 
-        global i_frames
+            global i_frames
 
-        if keys[pygame.K_e] and i_frames <= 0:
-            enemy.take_damage(5)
-            i_frames += 1
-        elif i_frames > 0:
-            i_frames -= 0.1
+            if keys[pygame.K_e] and i_frames <= 0:
+                enemy.take_damage(5)
+                i_frames += 1
+            elif i_frames > 0:
+                i_frames -= 0.1
 
     count = 0
 
@@ -274,13 +301,16 @@ def update_deaths(screen):
         boom.refresh()
 
         boom.image.set_alpha(boom.opacity)
-        screen.blit(boom.image, boom.pos)
+        screen.blit(boom.image, [boom.pos[0] - boom.image.get_width()/2, boom.pos[1] - boom.image.get_height()/2])
+
+        if hitBoxes:
+            pygame.draw.circle(screen, "red", boom.rect.center, radius=boom.image.get_width()/2, width=2)
 
         count += 1
 
     count = 0
 
-    for boom in projectiles:
+    for boom in deaths:
         try:
             if boom.opacity <= 0:
                 deaths.pop(count)
@@ -306,19 +336,20 @@ def update_pickups(screen):
 
         count += 1
 
-    keys = pygame.key.get_pressed()
+    if dev_tools:
+        keys = pygame.key.get_pressed()
 
-    global i_frames
+        global i_frames
 
-    if i_frames <= 0 and keys[pygame.K_x]:
-        x1 = random.randint(0, 1280)
-        y1 = random.randint(0, 720)
-        for i in range(random.randint(10, 10)):
-            create_pickup("xp", [x1, y1], random.randint(0, 360), 10, "Sprites/Extras/Effects/xp.svg", 10,
-                        random.randint(3, 30))
-        i_frames += 5
-    elif i_frames > 0:
-        i_frames -= 0.1
+        if i_frames <= 0 and keys[pygame.K_x]:
+            x1 = random.randint(0, 1280)
+            y1 = random.randint(0, 720)
+            for i in range(random.randint(10, 10)):
+                create_pickup("xp", [x1, y1], random.randint(0, 360), 10, "Sprites/Extras/Effects/xp.svg", 10,
+                            random.randint(3, 30))
+            i_frames += 5
+        elif i_frames > 0:
+            i_frames -= 0.1
 
     count = 0
 
@@ -329,6 +360,16 @@ def update_pickups(screen):
             count += 1
         except IndexError:
             pass
+
+
+def update_menu(screen):
+    count = 0
+
+    for but in menu_buttons:
+        but.refresh()
+
+        screen.blit(but.current_image, but.rect)
+        # create function to see if mouse is over button.
 
 
 # --- Create Functions ---
@@ -343,14 +384,11 @@ def create_healthBar(type_, health, maxHealth, screen, pos):
 
 def create_player(type_=1):
     if type_ == 1:
-        player = Player("Sprites/Player/Ship 1/basic ship.svg", ["Sprites/Player/Ship 1/basic ship2.svg"], [-100, 360], 1, 4.5, 2, 5, 15, 10,
-                        False, [WIDTH, HEIGHT])
+        player = PlayerV2({"Sprites/Player/Ship 1/basic ship.svg": [0, 0.1, [4, 0]], "Sprites/Player/Ship 1/basic ship2.svg": (1, 0.1, [4,0])}, screen, [-100, 360], 1, 20, 30, 30, 5, 3, 10)
         create_healthBar("p", player.health, player.maxHealth, screen, player.pos)
         plist.append(player)
-    elif type_ == 2:
-        player = Player("Sprites/Player/Ship 4/RailGun.svg", ["Sprites/Player/Ship 4/RailGun2.svg"], [-100, 360], 1, 20, 2, 5,
-                        15, 10,
-                        False, [WIDTH, HEIGHT])
+    elif type_ == 4:
+        player = PlayerV2({"Sprites/Player/Ship 4/RailGun2.svg": [0, 0.1, [800, 0]], "Sprites/Player/Ship 4/RailGun.svg": [1, 0.1, [14, 0]]}, screen, [-100, 360], 4, 50, 50, 50, 3, 0, 20, 10, 10, 0)
         create_healthBar("p", player.health, player.maxHealth, screen, player.pos)
         plist.append(player)
 
@@ -366,21 +404,30 @@ def create_projectile(type_, speed, damage, pos, angle, lifeTime):
     projectiles.append(projectile)
 
 
-def create_death(pos, type_):
+def create_death(pos, type_, damage=0):
     if type_ == "s":
         death = Deaths("s", "Sprites/Extras/Deaths/EXPLOSION small.svg", pos)
         deaths.append(death)
-    elif type_ == "minePlayer":
-        death = Deaths("p", "Sprites/Extras/Deaths/EXPLOSION small.svg", pos)
+    elif type_ == "minePlayer" or type_ == "p":
+        if damage/10 > 3:
+            size = 3
+        else:
+            size = damage/10
+        death = Deaths("p", "Sprites/Extras/Deaths/EXPLOSION small.svg", pos, damage, size)
         deaths.append(death)
     elif type_ == "mineEnemy":
-        death = Deaths("e", "Sprites/Extras/Deaths/EXPLOSION small.svg", pos)
+        death = Deaths("e", "Sprites/Extras/Deaths/EXPLOSION small.svg", pos, damage)
         deaths.append(death)
 
 
 def create_pickup(type_, pos, angle, speed, source, lifetime, value):
     pickup = PickUp(angle, speed, pos, type_, source, lifetime, value)
     pick_ups.append(pickup)
+
+
+def create_button(type_, pos, image, scale, exit_dir, max_scale, enter=0, loop=50, velX=10, opacity=300, increase=6):
+    button = TitleButtons(image, pos, scale,type_, max_scale, exit_dir, enter, loop, velX, opacity, increase)
+    menu_buttons.append(button)
 
 
 # --- Enemy Spawner ---
@@ -579,7 +626,7 @@ def open_levels(world):
 
 
 # -- Test Area --
-create_player()
+create_player(0)
 
 world = open_levels("S1")
 
@@ -605,6 +652,45 @@ while running:
 
     # Update screen
     if not game_pause and level_start:
+        if dev_tools:
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_h] and buttons["h"][0] and not buttons["h"][1]:
+                hitBoxes = False
+                buttons["h"][0] = False
+                buttons["h"][1] = True
+            elif keys[pygame.K_h] and not buttons["h"][0] and not buttons["h"][1]:
+                hitBoxes = True
+                buttons["h"][0] = True
+                buttons["h"][1] = True
+            elif not keys[pygame.K_h]:
+                buttons["h"][1] = False
+
+            if keys[pygame.K_p] and buttons["p"][0] and not buttons["p"][1]:
+                party_mode = False
+                buttons["p"][0] = False
+                buttons["p"][1] = True
+            elif keys[pygame.K_p] and not buttons["p"][0] and not buttons["p"][1]:
+                party_mode = True
+                buttons["p"][0] = True
+                buttons["p"][1] = True
+            elif not keys[pygame.K_p]:
+                buttons["p"][1] = False
+
+            if keys[pygame.K_1] and i_frames <= 0:
+                enemy_presets("1", "1")
+                i_frames += 50
+                print("Queueing formation 1 [ Current queue", len(spawn), "]")
+
+            elif keys[pygame.K_2] and i_frames <= 0:
+                enemy_presets("2", "1")
+                i_frames += 50
+                print("Queueing formation 2 [ Current queue", len(spawn), "]")
+
+            if keys[pygame.K_0] and i_frames <= 0:
+                create_player()
+                i_frames += 100
+                print("Spawning player")
+
         if not party_mode:
             screen.fill((0, 0, 10))
 
@@ -629,6 +715,9 @@ while running:
         update_deaths(screen)
 
         pygame.display.update()
+
+    if main_menu:
+        pass
 
     clock.tick(FPS)
 
